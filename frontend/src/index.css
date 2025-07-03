@@ -1,0 +1,9 @@
+body {
+    background-image: url('../public/fondo.jpg');
+    background-size: cover;      
+    background-position: center; 
+    background-repeat: no-repeat;
+    background-attachment: scroll; /* se mueve con el scroll */
+    min-height: 100vh; /* permite crecer verticalmente */
+    margin: 0;                  
+  }
