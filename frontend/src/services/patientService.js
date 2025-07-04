@@ -32,6 +32,19 @@ export const validarPaciente = async (tipo, cedula) => {
   }
 }
 
+export const copago = async (tipo, cedula) => {
+  try {
+    const response = await api.post('/api/pacientes/copago', {
+      numIden: cedula,
+      tipoIden: tipo
+    });
+    return response
+  } catch (error) {
+    console.error('Error en la validación del paciente (copago):', error);
+    throw error;
+  }
+}
+
 export const consultaAfiliado = async (tipo, cedula, codigoProducto) => {
   const requestBody = {
       subject: {

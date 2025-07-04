@@ -1,7 +1,5 @@
 import Swal from 'sweetalert2';
 
-
-
 // Campos incompletos
 export const defaultAlert = (icon='info', title, text) => {
     return Swal.fire({
