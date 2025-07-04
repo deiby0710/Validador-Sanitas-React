@@ -23,51 +23,42 @@ export const PatientSummary = () => {
         defaultAlert('error', "Error", error)
     }
 
-    if (!data) {
-        defaultAlert('info','Alerta!', 'No se encontró información del usuario.')
-    }
-
-    const detailsProps = {
-        identificacionCotizante: data.numCotizante,
-        sgsss: data.sgsss,
-        tipoAfilidado: data.tipoAfilidado,
-        categoria: data.categoria,
-        desEstAuth: data.estado,
-        tipoDocumentoContratante: data.tipoDocumentoContratante,
-        motivoEstado: data.motivoEstado
-    };
-
-    const generalDataProps = {
-        nombre: data.nombre,
-        estado: data.estado,
-        correo: data.correo,
-        producto: data.nombreProducto,
-        tipoDocumento: data.tipoDocumento,
-        fechaNacimiento: data.fechaNacimiento,
-        plan: data.nombrePlan,
-        numeroDocumento: data.numeroDocumento,
-        edad: data.edad,
-        contrato: data.contrato,
-        telefono: data.telefonoPrincipal,
-        sexo: data.sexo,
-        familia: data.familia,
-        segundoTelefono: data.segundoTelefono,
-        numeroUsuario: data.numUsuario
-    };
-
-    const autorizaciones = data.autorizaciones || [];
+    // if (!data) {
+    //     defaultAlert('info','Alerta!', 'No se encontró información del usuario.')
+    // }
+    console.log("La data es: ")
+    console.log(data)
 
 
-    const mockDetails = {
-        identificacionCotizante: "123456789",
-        sgsss: "25",
-        tipoAfilidado: "Cotizante",
-        categoria: "A",
-        desEstAuth: "Autorizado",
-        tipoDocumentoContratante: "CC",
-        vigencia: "2025-01-01 hasta 2025-12-31",
-        motivoEstado: "Afiliación activa",
-        };
+    // const detailsProps = {
+    //     identificacionCotizante: data.numCotizante,
+    //     sgsss: data.sgsss,
+    //     tipoAfilidado: data.tipoAfilidado,
+    //     categoria: data.categoria,
+    //     desEstAuth: data.estado,
+    //     tipoDocumentoContratante: data.tipoDocumentoContratante,
+    //     motivoEstado: data.motivoEstado
+    // };
+
+    // const generalDataProps = {
+    //     nombre: data.nombre,
+    //     estado: data.estado,
+    //     correo: data.correo,
+    //     producto: data.nombreProducto,
+    //     tipoDocumento: data.tipoDocumento,
+    //     fechaNacimiento: data.fechaNacimiento,
+    //     plan: data.nombrePlan,
+    //     numeroDocumento: data.numeroDocumento,
+    //     edad: data.edad,
+    //     contrato: data.contrato,
+    //     telefono: data.telefonoPrincipal,
+    //     sexo: data.sexo,
+    //     familia: data.familia,
+    //     segundoTelefono: data.segundoTelefono,
+    //     numeroUsuario: data.numUsuario
+    // };
+
+    // const autorizaciones = data.autorizaciones || [];
 
     const mockGeneralData = {
         nombre: "Carlos Pérez",
@@ -86,6 +77,35 @@ export const PatientSummary = () => {
         segundoTelefono: "3017654321",
         numeroUsuario: "USU-987654"
         };
+    const promptGeneralData = {
+        nombre: data?.nombre,
+        estado: data?.estado,
+        correo: data?.correo,
+        producto: `${data?.codigoProducto} ${data?.nombreProducto}`,
+        tipoDocumento: data?.tipoDocumento,
+        fechaNacimiento: data?.fechaNacimiento,
+        plan: `${data?.codigoPlan} ${data?.nombrePlan}`,
+        numeroDocumento: data?.numeroDocumento,
+        edad: data?.edad,
+        contrato: data?.contrato,
+        telefono: data?.telefonoPrincipal,
+        sexo: data?.genero,
+        familia: data?.familia,
+        segundoTelefono: data?.segundoTelefono,
+        numeroUsuario: data?.numUsuario
+        };
+
+    const mockDetails = {
+        identificacionCotizante: "123456789",
+        sgsss: "25",
+        tipoAfilidado: "Cotizante",
+        categoria: "A",
+        desEstAuth: "Autorizado",
+        tipoDocumentoContratante: "CC",
+        vigencia: "2025-01-01 hasta 2025-12-31",
+        motivoEstado: "Afiliación activa"
+        };
+
     const mockAutorizaciones = [
         {
             numero: "297914350",
@@ -105,7 +125,7 @@ export const PatientSummary = () => {
     
     return (
         <div className="container py-3">
-            <UserInfoGeneral userGeneralData={mockGeneralData}/>
+            <UserInfoGeneral userGeneralData={promptGeneralData}/>
             <PatientDetails PatientDetailsData={mockDetails}/>
             <AuthorizationTable autorizaciones={mockAutorizaciones} onConsultar={handleConsultar}/>
         </div>
