@@ -5,11 +5,9 @@ import { safeValue } from "../../utils/formatters";
     const {
         identificacionCotizante,
         sgsss,
-        tipoAfilidado,
+        tipoAfiliado,
         categoria,
-        desEstAuth,
         tipoDocumentoContratante,
-        vigencia,
         motivoEstado
     } = PatientDetailsData || {};
     return (
@@ -26,19 +24,19 @@ import { safeValue } from "../../utils/formatters";
                 </div>
                 <div className="row my-2">
                     <div className="col-3 fw-bold">Tipo de afiliado:</div>
-                    <div className="col">{safeValue(tipoAfilidado)}</div>
+                    <div className="col">{safeValue(tipoAfiliado)}</div>
                     <div className="col-3 fw-bold">Categoría:</div>
                     <div className="col">{safeValue(categoria)}</div>
                 </div>
                 <div className="row my-2">
                     <div className="col-3  fw-bold"></div>
-                    <div className="col">{safeValue(desEstAuth)}</div>
+                    <div className="col"></div>
                     <div className="col-3 fw-bold">Tipo de documento:</div>
                     <div className="col">{safeValue(tipoDocumentoContratante)}</div>
                 </div>
                 <div className="row my-2">
                     <div className="col-3 fw-bold"></div>
-                    <div className="col">{safeValue(vigencia)}</div>
+                    <div className="col"></div>
                     <div className="col-3 fw-bold">Motivo del estado del usuario:</div>
                     <div className="col">{safeValue(motivoEstado)}</div>
                 </div>

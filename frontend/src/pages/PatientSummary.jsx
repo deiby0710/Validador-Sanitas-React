@@ -1,9 +1,7 @@
-import React, {useEffect, useState} from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { UserInfoGeneral } from "../components/PatientSummary/UserInfoGeneral";
 import { PatientDetails } from "../components/PatientSummary/PatientDetails";
 import { AuthorizationTable } from "../components/PatientSummary/AuthorizationTable";
-import { basicData } from "../services/patientService";
 import { usePatientData } from "../hooks/usePatientData";
 import { loadingAlert, closeAlert, defaultAlert } from "../utils/alert";
 
@@ -11,7 +9,8 @@ export const PatientSummary = () => {
     const location = useLocation();
     const { codigo, tipo, cedula } = location.state || {};
 
-    const {data, loading, error} = usePatientData('CC', '1193473974', '');
+    const {data, loading, error} = usePatientData(tipo, cedula, codigo);
+    const navigate = useNavigate();
 
     if (loading){
         loadingAlert();
@@ -23,42 +22,6 @@ export const PatientSummary = () => {
         defaultAlert('error', "Error", error)
     }
 
-    // if (!data) {
-    //     defaultAlert('info','Alerta!', 'No se encontró información del usuario.')
-    // }
-    console.log("La data es: ")
-    console.log(data)
-
-
-    // const detailsProps = {
-    //     identificacionCotizante: data.numCotizante,
-    //     sgsss: data.sgsss,
-    //     tipoAfilidado: data.tipoAfilidado,
-    //     categoria: data.categoria,
-    //     desEstAuth: data.estado,
-    //     tipoDocumentoContratante: data.tipoDocumentoContratante,
-    //     motivoEstado: data.motivoEstado
-    // };
-
-    // const generalDataProps = {
-    //     nombre: data.nombre,
-    //     estado: data.estado,
-    //     correo: data.correo,
-    //     producto: data.nombreProducto,
-    //     tipoDocumento: data.tipoDocumento,
-    //     fechaNacimiento: data.fechaNacimiento,
-    //     plan: data.nombrePlan,
-    //     numeroDocumento: data.numeroDocumento,
-    //     edad: data.edad,
-    //     contrato: data.contrato,
-    //     telefono: data.telefonoPrincipal,
-    //     sexo: data.sexo,
-    //     familia: data.familia,
-    //     segundoTelefono: data.segundoTelefono,
-    //     numeroUsuario: data.numUsuario
-    // };
-
-    // const autorizaciones = data.autorizaciones || [];
 
     const mockGeneralData = {
         nombre: "Carlos Pérez",
@@ -95,20 +58,26 @@ export const PatientSummary = () => {
         numeroUsuario: data?.numUsuario
         };
 
+    const promptDetails = {
+        identificacionCotizante: data?.numCotizante,
+        sgsss: data?.sgsss,
+        tipoAfiliado: data?.tipoAfiliado,
+        categoria: data?.categoria,
+        tipoDocumentoContratante: data?.tipoDocumentoContratante,
+        motivoEstado: data?.motivoEstado
+        };
     const mockDetails = {
         identificacionCotizante: "123456789",
         sgsss: "25",
-        tipoAfilidado: "Cotizante",
+        tipoAfiliado: "Cotizante",
         categoria: "A",
-        desEstAuth: "Autorizado",
         tipoDocumentoContratante: "CC",
-        vigencia: "2025-01-01 hasta 2025-12-31",
         motivoEstado: "Afiliación activa"
         };
 
     const mockAutorizaciones = [
         {
-            numero: "297914350",
+            numero: "297914338",
         },
         {
             numero: "297914357",
@@ -120,13 +89,16 @@ export const PatientSummary = () => {
 
     const handleConsultar = async (auth) => {
         const numero = auth.numero
-        console.log(numero)
+        navigate("/autorizacion", {
+            state: { numeroAutorizacion: numero }
+        });
+        console.log(auth)
     }
     
     return (
         <div className="container py-3">
             <UserInfoGeneral userGeneralData={promptGeneralData}/>
-            <PatientDetails PatientDetailsData={mockDetails}/>
+            <PatientDetails PatientDetailsData={promptDetails}/>
             <AuthorizationTable autorizaciones={mockAutorizaciones} onConsultar={handleConsultar}/>
         </div>
     )

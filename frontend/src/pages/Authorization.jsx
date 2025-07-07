@@ -1,8 +1,18 @@
+import { useLocation } from "react-router-dom"
 import { AuthorizationInfo } from "../components/Authorization/AuthorizationInfo"
 import { MedicalOrderDetails } from "../components/Authorization/MedicalOrderDetails"
 import { MedicationList } from "../components/Authorization/MedicationList"
+import { useAuthData } from "../hooks/useAuthData"
 
 export const Autorizacion = () => {
+    const location = useLocation()
+    const { numeroAutorizacion } = location.state || {};
+
+    const { data, loading, error } = useAuthData(numeroAutorizacion);
+
+    console.log('La data es')
+    console.log(data)
+    
     // Datos simulados que luego vendrán del back
     const mockAuthData = {
         numAuth: "297914350",

@@ -109,7 +109,7 @@ const parseConsultaAfiliadoData = (data) => {
     segundoTelefono: telecom.find(item => item.system === "CELULAR")?.value || "",
     correo: telecom.find(item => item.system === "CORREO_ELECTRONICO")?.value || "",
     numCotizante: contractIdentifiers.find(item => item.type === "NUMERO_IDENT_CONTRATANTE")?.value || "",
-    tipoAfilidado: patientRole.find(item => item.type === "DESC_TIPO_USUARIO")?.value || "",
+    tipoAfiliado: patientRole.find(item => item.type === "DESC_TIPO_USUARIO")?.value || "",
     sgsss: patient?.supportingInfo?.generalSystemSocialSecurityHealth || null,
     tipoDocumentoContratante: contractIdentifiers.find(item => item.type === "TIPO_IDENT_CONTRATANTE")?.value || "",
     categoria: contract?.subType ?? null,
