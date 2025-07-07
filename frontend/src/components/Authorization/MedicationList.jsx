@@ -18,7 +18,7 @@ export const MedicationList = ({listMed = []}) => {
                             <div className="col fw-bold">Codigo legal medicamento OSI:</div>
                             <div className="col">{safeValue(med.codLegMedicamento)}</div>
                             <div className="col fw-bold">Controlado:</div>
-                            <div className="col">{safeValue(med.controlado)}</div>
+                            <div className="col">{safeValue(String(med.controlado))}</div>
                         </div>
                         <div className="row">
                             <div className="col fw-bold">Nombre medicamento OSI:</div>

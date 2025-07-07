@@ -52,19 +52,19 @@ export const AuthorizationInfo = ( {authData} ) => {
                     <div className="col-2 fw-bold">Categoria:</div>
                     <div className="col">{safeValue(categoria)}</div>
                     <div className="col-2 fw-bold">Consumida:</div>
-                    <div className="col">{safeValue(authConsumida)}</div>
+                    <div className="col">{safeValue(String(authConsumida))}</div>
                 </div>
                 <div className="row my-2">
                     <div className="col-2 fw-bold">Fecha Notificacion:</div>
                     <div className="col">{safeValue(fechNotificacion)}</div>
                     <div className="col-2 fw-bold">Renovada:</div>
-                    <div className="col">{safeValue(authRenovada)}</div>
+                    <div className="col">{safeValue(String(authRenovada))}</div>
                 </div>
                 <div className="row my-2">
                     <div className="col-2 fw-bold">Fecha Solicitud:</div>
                     <div className="col">{safeValue(fechSolicitud)}</div>
                     <div className="col-2 fw-bold">Apta:</div>
-                    <div className="col">{safeValue(authApta)}</div>
+                    <div className="col">{safeValue(String(authApta))}</div>
                 </div>
             </div>
         </div>
