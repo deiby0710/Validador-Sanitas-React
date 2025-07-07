@@ -21,4 +21,3 @@ app.use('/api/autorizacion',autorizacionesRoutes)
 app.listen(port, () => {
     console.log(`Servidor corriendo en el puerto: ${port}`);
 });
- 
