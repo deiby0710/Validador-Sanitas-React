@@ -38,7 +38,7 @@ export const copago = async (tipo, cedula) => {
       numIden: cedula,
       tipoIden: tipo
     });
-    return response
+    return response.data
   } catch (error) {
     console.error('Error en la validación del paciente (copago):', error);
     throw error;

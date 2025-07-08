@@ -75,6 +75,8 @@ export const PatientSummary = () => {
         motivoEstado: "Afiliación activa"
         };
 
+    const promptAutorizaciones = data?.autorizaciones; 
+
     const mockAutorizaciones = [
         {
             numero: "297914338",
@@ -99,7 +101,7 @@ export const PatientSummary = () => {
         <div className="container py-3">
             <UserInfoGeneral userGeneralData={promptGeneralData}/>
             <PatientDetails PatientDetailsData={promptDetails}/>
-            <AuthorizationTable autorizaciones={mockAutorizaciones} onConsultar={handleConsultar}/>
+            <AuthorizationTable autorizaciones={promptAutorizaciones} onConsultar={handleConsultar}/>
         </div>
     )
 }

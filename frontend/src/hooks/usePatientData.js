@@ -64,8 +64,8 @@ export const usePatientData = (tipo, cedula, codigoProducto) => {
       }
 
       try {
-        // const copagoResp = await copago(tipo, cedula);
-        result = { ...result, ...parseCopagoData(mockCopago) };
+        const copagoResp = await copago(tipo, cedula);
+        result = { ...result, ...parseCopagoData(copagoResp) };
       } catch (err) {
         console.error("Error en copago", err);
       }
