@@ -1,0 +1,18 @@
+[
+  {
+    "nombrecompleto": "Kelly Andrea Bucheli Rodriguez",
+    "cedula": "1085305546",
+    "username": "KELLYBUCHELI",
+    "password": "K1085305546",
+    "sede": "LA CRUZ",
+    "role": "user"
+  },
+  {
+    "nombrecompleto": "Deiby Alejandro Delgado Estrada",
+    "cedula": "1234567890",
+    "username": "ALEJO",
+    "password": "alejo",
+    "sede": "PASTO",
+    "role": "admin"
+  }
+]

@@ -8,8 +8,8 @@ export const AppRouter = () => {
     return (
         <Routes>
             <Route path='/' element={<Login/>}/>
-            {/* <Route path='/' element={<PatientForm/>}/> */}
             <Route path='/*' element={<Navigate to='/' />}/>
+            <Route path='/validador' element={<PatientForm/>}/>
             <Route path='/usuario' element={<PatientSummary/>} />
             <Route path='/autorizacion' element={<Autorizacion/>}/>
         </Routes>
