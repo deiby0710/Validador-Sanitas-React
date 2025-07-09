@@ -39,7 +39,7 @@ export const consumirAuthorization = async (numeroAutorizacion, codProducto, suc
   }
   try {
     const response = await api.post("api/autorizacion/consumir", requestBody)
-    return response
+    return response.data
   } catch(err) {
     console.error('Error en el servicio de copagoAuthorization:', err)
     throw err;

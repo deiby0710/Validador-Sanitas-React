@@ -27,3 +27,17 @@ export const loadingAlert = (titulo='Buscando...', texto='Por favor espera un mo
 export const closeAlert = () => {
     Swal.close()
 }
+
+// Preguntar
+export const confirmationQuestion = async (icono="question" ,titulo="Titulo", texto="Esta seguro?", confirmar="Si", denegar="No") => {
+    const result = await Swal.fire({
+        icon: icono,
+        title: titulo,
+        text: texto,
+        showCancelButton: true,
+        confirmButtonText: confirmar,
+        cancelButtonText: denegar,
+        heightAuto: false
+    });
+    return result.isConfirmed;
+};
