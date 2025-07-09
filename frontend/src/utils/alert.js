@@ -11,10 +11,10 @@ export const defaultAlert = (icon='info', title, text) => {
 };
 
 // Cargando alerta
-export const loadingAlert = () => {
+export const loadingAlert = (titulo='Buscando...', texto='Por favor espera un momento') => {
     return Swal.fire({
-        title: 'Buscando...',
-        text: 'Por favor espera un momento',
+        title: titulo,
+        text: texto,
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading();

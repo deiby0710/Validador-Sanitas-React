@@ -31,10 +31,10 @@ export const copagoAuthorization = async (numAutorizacion) => {
   }
 }
 
-export const consumirAuthorization = async (numeroAutorizacion, codigo, sucursal) => {
+export const consumirAuthorization = async (numeroAutorizacion, codProducto, sucursal) => {
   const requestBody = {
     numeroAutorizacion: numeroAutorizacion, 
-    codigo: codigo, 
+    codigo: codProducto, 
     sucursal: sucursal
   }
   try {

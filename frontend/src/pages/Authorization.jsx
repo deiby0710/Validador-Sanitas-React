@@ -4,6 +4,7 @@ import { MedicalOrderDetails } from "../components/Authorization/MedicalOrderDet
 import { MedicationList } from "../components/Authorization/MedicationList"
 import { useAuthData } from "../hooks/useAuthData"
 import { loadingAlert, closeAlert } from "../utils/alert"
+import { consumirAuthorization } from "../services/authorizationService"
 
 export const Autorizacion = () => {
     const location = useLocation()
@@ -52,13 +53,28 @@ export const Autorizacion = () => {
     };
 
     const promptMedicamentos = data?.medicamentos;
+
+    const handleConsumir = async() => {
+        loadingAlert("Procesando...", "Consumiendo autorización...");
+        const numeroAutorizacion = data?.numAuth;
+        const sucursal = data?.sucursal;
+        const codProducto = data?.codProducto;
+        try {
+            closeAlert();
+            const response = await consumirAuthorization(numeroAutorizacion, codProducto, sucursal)
+            defaultAlert("success", "Autorización consumida", "La autorización fue consumida exitosamente.");
+        } catch (err) {
+            closeAlert();
+            defaultAlert("error", "Error al consumir", "Ocurrió un error al consumir la autorización.");
+        }
+    }
     return (
         <div className="container py-3">
             <AuthorizationInfo authData={promptAuthData}/>
             <MedicalOrderDetails medOrdData={promptMedOrder}/>
             <MedicationList listMed={promptMedicamentos}/>
             <div className="d-flex justify-content-center align-items-center mt-3">
-                <button className="btn btn-dark">Consumir</button>
+                <button className="btn btn-dark" onClick={handleConsumir}>Consumir</button>
             </div>
         </div>
     )
