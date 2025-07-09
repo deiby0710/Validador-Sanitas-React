@@ -17,3 +17,31 @@ export const consultaAuthorization = async (numAutorizacion) => {
         throw error;
     }
 }
+
+export const copagoAuthorization = async (numAutorizacion) => {
+  const requestBody = {
+    numeroAutorizacion: numAutorizacion
+  }
+  try {
+    const response = await api.post("api/autorizacion/copago", requestBody)
+    return response.data
+  } catch (error) {
+    console.error('Error en el servicio de copagoAuthorization:', error)
+    throw error;
+  }
+}
+
+export const consumirAuthorization = async (numeroAutorizacion, codigo, sucursal) => {
+  const requestBody = {
+    numeroAutorizacion: numeroAutorizacion, 
+    codigo: codigo, 
+    sucursal: sucursal
+  }
+  try {
+    const response = await api.post("api/autorizacion/consumir", requestBody)
+    return response
+  } catch(err) {
+    console.error('Error en el servicio de copagoAuthorization:', err)
+    throw err;
+  }
+}

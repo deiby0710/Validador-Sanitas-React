@@ -183,3 +183,56 @@ export const consumirAuth = async (numeroAutorizacion, codigo, sucursal, authHea
         throw error
     }
 }
+
+export const copayAmount1 = async (numeroAutorizacion,authHeader) => {
+  const currentDay = new Date().toISOString().split("T")[0]
+  const requestBody = {
+    "resourceType": "Bundle",
+    "id": "bundle-request-copayAmount",
+    "type": "transaction",
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "Patient",
+          "id": "GUID",
+          "meta": {
+            "lastUpdated": currentDay
+          },
+          "identifier": [
+            {
+              "system": "BH/NUMERO_AUTORIZACION",
+              "value": `${numeroAutorizacion}`
+            }
+          ]
+        }
+      }
+    ]
+  }
+  try {
+    const response = await fetch(
+      "https://papi.colsanitas.com/osi/api/financialResourcesManagement/payment/coverage/v1.0.0/copayAmount",
+      {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": authHeader,
+            "user": "CO11VG60AMPGENHOSPI",
+            "dateRequest": '2024-01-22',
+            "businessFunction": "Dispensacion Medicamentos",
+            "aplicationCod": "PSA000199903",
+            "typeQuery": 1
+        },
+        body: JSON.stringify(requestBody)
+      }
+    );
+
+    if (!response.ok){
+      throw new Error(`Error en la solicitud: ${response.status}`)
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.log("Error en copayAmount:", error)
+    throw error
+  }
+}

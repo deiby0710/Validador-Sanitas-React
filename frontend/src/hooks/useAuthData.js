@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { consultaAuthorization } from "../services/authorizationService";
+import { consultaAuthorization, copagoAuthorization } from "../services/authorizationService";
 import { formateDate } from "../utils/formatters";
 
 export const useAuthData = (numAutorizacion) => {
@@ -19,7 +19,12 @@ export const useAuthData = (numAutorizacion) => {
             } catch (err) {
                 console.error('Error en authData: ', err);
             }
-            console.log(result)
+            try {
+                const consulta = await copagoAuthorization(numAutorizacion);
+                result = { ...result, ...parseCopagoData(consulta)}
+            } catch (err) {
+                console.log('Error en authData: ', err)
+            }
             setData(result);
             setLoading(false);
         };
@@ -77,6 +82,18 @@ const parseConsultaData = (data) => {
         periodicidad: autorizacion.serviceRequest?.basedOn?.MedicationRequest?.dispenseRequest?.dispenseInterval || '',
 
         // Medicamentos
-        medicamentos: medicamentos
+        medicamentos: medicamentos,
+
+        // Consumir auth
+        sucursal: autorizacion.performer?.practitioner?.identifier?.[2]?.value || '',
+        codProducto: autorizacion.insurance?.coverage?.insurancePlan?.identifier?.[0]?.value || ''
     };
+}
+
+const parseCopagoData = (data) => {
+    let cobro = data?.entry?.[0]?.resource?.costToBeneficiary?.[0]?.valueMoney?.value ?? '';
+    let texto = data?.entry?.[0]?.resource?.costToBeneficiary?.[0]?.exception?.[0]?.type?.text ?? '';
+    if (cobro === 0 && texto === 'Primera vez') return {};
+    // sanitas: texto = 'Sin cobro de cuota moderadora'
+    return {cobro}
 }

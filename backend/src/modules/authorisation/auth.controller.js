@@ -1,4 +1,4 @@
-import { consultAuthorisation, consumirAuth } from './auth.service.js'
+import { consultAuthorisation, consumirAuth, copayAmount1 } from './auth.service.js'
 
 export const consultAuthorisationController = async(req, res) => {
     try {
@@ -40,5 +40,29 @@ export const consumirAuthController = async(req, res) => {
             message: "Error al consumir la autorizacion.",
             error: error.message
         });
+    }
+}
+
+export const copayAmount1Controller = async(req,res)=>{
+    try {
+        const {numeroAutorizacion}  = req.body
+        const authHeader = req.headers["Authorization"];
+        if (!numeroAutorizacion){
+            return res.status(400).json({ message: "Falta el numero de autorizacion."})
+        }
+        if (!authHeader) {
+            return res.status(401).json({ message: "Falta el token de autorización en el encabezado." });
+        }
+        const data = await copayAmount1(numeroAutorizacion, authHeader);
+        if(!data){
+            return res.status(404).json({message: "No se encontraron datos en el copay amount"})
+        }
+        res.json(data)
+    } catch (error) {
+        console.error("Error en copayAmount1Controller: ", error)
+        res.status(500).json({
+            message: "Error obteniendo datos del paciente (Copay Amount)",
+            error: error.message
+        })
     }
 }
