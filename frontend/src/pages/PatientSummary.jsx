@@ -93,7 +93,10 @@ export const PatientSummary = () => {
             numero: "297928504",
         },
         {
-            numero: ""
+            numero: "297946372"
+        },
+        {
+            numero: "297946371"
         }
     ];
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { safeValue } from "../../utils/formatters";
 
-export const MedicationList = ({listMed = []}) => {
+export const MedicationList = ({listMed = [], cobro}) => {
     return (
         <div className="container">
             <div className="d-flex justify-content-center align-items-center">
@@ -36,7 +36,7 @@ export const MedicationList = ({listMed = []}) => {
                             <div className="col fw-bold">Sucursal:</div>
                             <div className="col">{safeValue(med.sucursal)}</div>
                             <div className="col fw-bold">Cobro:</div>
-                            <div className="col">{safeValue(med.cobro)}</div>
+                            <div className="col">{safeValue(cobro)}</div>
                         </div>
                         <div className="row">
                             <div className="col fw-bold">Código Producto:</div>

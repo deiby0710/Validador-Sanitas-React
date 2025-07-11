@@ -1,5 +1,5 @@
 export const safeValue = (val, fallback = 'N/A') => {
-    return val || fallback;
+    return val !== undefined && val !== null ? val : fallback;
 }
 
 export const formateDate = (dateString) => {

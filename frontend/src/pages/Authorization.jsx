@@ -56,7 +56,7 @@ export const Autorizacion = () => {
         <div className="container py-3">
             <AuthorizationInfo authData={promptAuthData}/>
             <MedicalOrderDetails medOrdData={promptMedOrder}/>
-            <MedicationList listMed={promptMedicamentos}/>
+            <MedicationList listMed={promptMedicamentos} cobro={data?.cobro}/>
             <BtnConsumir numeroAutorizacion={data?.numAuth} codProducto={data?.codProducto} sucursal={data?.sucursal}/>
         </div>
     )

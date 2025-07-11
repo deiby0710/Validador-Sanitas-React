@@ -2,6 +2,75 @@ import { useEffect, useState } from "react";
 import { consultaAuthorization, copagoAuthorization } from "../services/authorizationService";
 import { formateDate } from "../utils/formatters";
 
+const mockCopagoAuth = {
+    "resourceType": "Bundle",
+    "id": "20E4A82392B64E2D81FF69DF114E7076",
+    "type": "searchset",
+    "total": 1,
+    "entry": [
+        {
+            "resource": {
+                "resourceType": "Coverage",
+                "id": "20E4A82392B64E2D81FF69DF114E7076",
+                "status": "active",
+                "identifier": [
+                    {
+                        "system": "BH/NUMERO_AUTORIZACION",
+                        "value": "297946371"
+                    }
+                ],
+                "costToBeneficiary": [
+                    {
+                        "valueQuantity": {
+                            "value": 0
+                        },
+                        "valueMoney": {
+                            "value": 0
+                        },
+                        "exception": [
+                            {
+                                "type": {
+                                    "coding": [
+                                        {
+                                            "system": "BH/MOTIVO_NO_PAGO",
+                                            "code": "3"
+                                        }
+                                    ],
+                                    "text": "Sin cobro de cuota moderadora"
+                                }
+                            }
+                        ],
+                        "class": [
+                            {
+                                "type": {
+                                    "coding": [
+                                        {
+                                            "system": "BH/REGIMEN"
+                                        }
+                                    ]
+                                },
+                                "value": "CONTRIBUTIVO"
+                            },
+                            {
+                                "type": {
+                                    "coding": [
+                                        {
+                                            "system": "BH/CATEGORIA"
+                                        }
+                                    ]
+                                },
+                                "value": "GRUPO C"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "response": {
+                "status": "200 OK"
+            }
+        }
+    ]
+}
 export const useAuthData = (numAutorizacion) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false)
@@ -16,14 +85,13 @@ export const useAuthData = (numAutorizacion) => {
             try {
                 const consulta = await consultaAuthorization(numAutorizacion);
                 result =  { ...result, ...parseConsultaData(consulta)};
-                console.log("Results: ")
-                console.log(result)
             } catch (err) {
                 console.error('Error en authData: ', err);
             }
             try {
                 const consulta = await copagoAuthorization(numAutorizacion);
-                result = { ...result, ...parseCopagoData(consulta)}
+                // const consulta = await copagoAuthorization(numAutorizacion);
+                result = { ...result, ...parseCopagoData(consulta, result.cobroValueMoney, result.cobroPercentage)}
             } catch (err) {
                 console.log('Error en authData: ', err)
             }
@@ -51,8 +119,6 @@ const parseConsultaData = (data) => {
         cantDispensada: med.medicationDispense?.quantity ?? '',
         tipoCopago: autorizacion.costToBeneficiary?.type || '',
         codProducto: autorizacion.insurance?.coverage?.insurancePlan?.identifier?.[0]?.value || '',
-        cobro: data.authorization?.[0]?.costToBeneficiary?.valueMoney ?? '',
-        cobroPercentage: data.authorization?.[0]?.costToBeneficiary?.copayPercentage ?? ''
         };
     }) || [];
 
@@ -86,6 +152,8 @@ const parseConsultaData = (data) => {
 
         // Medicamentos
         medicamentos: medicamentos,
+        cobroValueMoney: data.authorization?.[0]?.costToBeneficiary?.valueMoney ?? '',
+        cobroPercentage: data.authorization?.[0]?.costToBeneficiary?.copayPercentage ?? '',
 
         // Consumir auth
         sucursal: autorizacion.performer?.practitioner?.identifier?.[2]?.value || '',
@@ -93,10 +161,10 @@ const parseConsultaData = (data) => {
     };
 }
 
-const parseCopagoData = (data) => {
+const parseCopagoData = (data, valueMoney, copayPercentage) => {
     let cobro = data?.entry?.[0]?.resource?.costToBeneficiary?.[0]?.valueMoney?.value ?? '';
     let texto = data?.entry?.[0]?.resource?.costToBeneficiary?.[0]?.exception?.[0]?.type?.text ?? '';
-    if (cobro === 0 && texto === 'Primera vez') return {};
-    // sanitas: texto = 'Sin cobro de cuota moderadora'
-    return {cobro}
+    if (cobro === 0 && texto === 'Sin cobro de cuota moderadora') return {cobro: copayPercentage};
+    // sanitas: texto = 'Primera vez'
+    return {cobro: valueMoney}
 }
