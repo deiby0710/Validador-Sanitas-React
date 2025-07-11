@@ -79,13 +79,21 @@ export const PatientSummary = () => {
 
     const mockAutorizaciones = [
         {
-            numero: "297914338",
+            // CP: 1 CC: 14701450
+            numero: "297914337", 
+        },
+        {
+            // CP: 2 CC: 3108856
+            numero: "297914334"
         },
         {
             numero: "297914351",
         },
         {
             numero: "297928504",
+        },
+        {
+            numero: ""
         }
     ];
 
@@ -94,7 +102,6 @@ export const PatientSummary = () => {
         navigate("/autorizacion", {
             state: { numeroAutorizacion: numero }
         });
-        console.log(auth)
     }
     
     return (

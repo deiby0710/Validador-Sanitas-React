@@ -5,15 +5,12 @@ import { MedicationList } from "../components/Authorization/MedicationList"
 import { BtnConsumir } from "../components/Authorization/btnConsumir"
 import { useAuthData } from "../hooks/useAuthData"
 import { loadingAlert, closeAlert } from "../utils/alert"
-import { consumirAuthorization } from "../services/authorizationService"
 
 export const Autorizacion = () => {
     const location = useLocation()
     const { numeroAutorizacion } = location.state || {};
 
     const { data, loading, error } = useAuthData(numeroAutorizacion);
-
-    console.log(data)
 
     if (loading){
         loadingAlert();

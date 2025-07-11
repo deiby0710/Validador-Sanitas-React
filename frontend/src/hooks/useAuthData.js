@@ -16,6 +16,8 @@ export const useAuthData = (numAutorizacion) => {
             try {
                 const consulta = await consultaAuthorization(numAutorizacion);
                 result =  { ...result, ...parseConsultaData(consulta)};
+                console.log("Results: ")
+                console.log(result)
             } catch (err) {
                 console.error('Error en authData: ', err);
             }
@@ -49,7 +51,8 @@ const parseConsultaData = (data) => {
         cantDispensada: med.medicationDispense?.quantity ?? '',
         tipoCopago: autorizacion.costToBeneficiary?.type || '',
         codProducto: autorizacion.insurance?.coverage?.insurancePlan?.identifier?.[0]?.value || '',
-        cobro: data.authorization?.[0]?.costToBeneficiary?.copayPercentage ?? ''
+        cobro: data.authorization?.[0]?.costToBeneficiary?.valueMoney ?? '',
+        cobroPercentage: data.authorization?.[0]?.costToBeneficiary?.copayPercentage ?? ''
         };
     }) || [];
 
