@@ -164,7 +164,7 @@ const parseConsultaData = (data) => {
 const parseCopagoData = (data, valueMoney, copayPercentage) => {
     let cobro = data?.entry?.[0]?.resource?.costToBeneficiary?.[0]?.valueMoney?.value ?? '';
     let texto = data?.entry?.[0]?.resource?.costToBeneficiary?.[0]?.exception?.[0]?.type?.text ?? '';
-    if (cobro === 0 && texto === 'Sin cobro de cuota moderadora') return {cobro: copayPercentage};
+    if (cobro === 0 && texto === 'Sin cobro de cuota moderadora') return {cobro: `${copayPercentage} %`};
     // sanitas: texto = 'Primera vez'
     return {cobro: valueMoney}
 }
