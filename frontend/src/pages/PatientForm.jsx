@@ -1,4 +1,4 @@
-import React, { use, useState } from 'react';
+import React, { useState } from 'react';
 import { SearchForm } from '../components/PatientSearch/SearchForm';
 import { RadioOptionList } from '../components/PatientSearch/RadioOptionList';
 import { defaultAlert } from '../utils/alert';
