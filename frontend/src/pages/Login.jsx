@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import users from "../data/users.json";
-import { loadingAlert, closeAlert, defaultAlert } from "../utils/alert";
+import { defaultAlert, timedAlert } from "../utils/alert";
 
 export const Login = () => {
     const [username, setUsername] = useState('');
@@ -15,6 +15,7 @@ export const Login = () => {
 
         const user = users.find(u => u.username === username && u.password === password)
         if (user) {
+            timedAlert('success', `¡Bienvenido ${username}!`)
             navigate('/validador')
         } else {
             defaultAlert('error', 'Error al inciar sesión', 'Contraseña o usuario incorrecto')

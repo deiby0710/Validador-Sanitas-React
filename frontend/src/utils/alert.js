@@ -41,3 +41,14 @@ export const confirmationQuestion = async (icono="question" ,titulo="Titulo", te
     });
     return result.isConfirmed;
 };
+
+// Bienvenido
+export const timedAlert = (icon, tittle, timer = 1500) => {
+    return Swal.fire({
+        position: "center",
+        icon: icon,
+        title: tittle,
+        showConfirmButton: false,
+        timer: timer
+    });
+}
