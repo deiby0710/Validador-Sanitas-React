@@ -30,7 +30,10 @@ export const consultAuthorisation = async (requestBody, authHeader) => {
 }
 
 export const consumirAuth = async (numeroAutorizacion, codigo, sucursal, authHeader) => {
-    const currentDay = new Date().toISOString().split(".")[0]
+    const date = new Date();
+    const currentDay = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+    .toISOString()
+    .split(".")[0];
     const body = {
         "resourceType": "Bundle",
         "type": "transaction",
