@@ -1,4 +1,4 @@
-import { medicationDispenseByIdS } from "./medDispense.service.js";
+import { medicationDispenseByIdS, medicationDispenseByAuthorizationS } from "./medDispense.service.js";
 
 export const medicationDispenseById = async (req, res) => {
   try {
@@ -21,7 +21,36 @@ export const medicationDispenseById = async (req, res) => {
 
     res.json(data);
   } catch (error) {
-    console.error("Error en authorizationMedicationDispenseController:", error);
+    console.error("Error en medicationDispenseById:", error);
+    res.status(500).json({
+      message: "Error obteniendo datos del paciente (Authorization Medication Dispense).",
+      error: error.message
+    });
+  }
+};
+
+export const medicationDispenseByAuthorization = async (req, res) => {
+  try {
+    const { autorizacion } = req.query;
+    const authHeader = req.headers["Authorization"];
+
+    if (!autorizacion) {
+      return res.status(400).json({
+        message: "Falta el numero de autorización."
+      });
+    }
+
+    const data = await medicationDispenseByAuthorizationS(autorizacion, authHeader);
+
+    if (!data) {
+      return res.status(404).json({
+        message: "No se encontraron datos en Authorization Medication Dispense."
+      });
+    }
+
+    res.json(data);
+  } catch (error) {
+    console.error("Error en medicationDispenseByAuthorization:", error);
     res.status(500).json({
       message: "Error obteniendo datos del paciente (Authorization Medication Dispense).",
       error: error.message
