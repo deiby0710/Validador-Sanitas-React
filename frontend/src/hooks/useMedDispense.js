@@ -3,6 +3,7 @@ import {
     serviceMedicationDispenseByIdentificacion,
     serviceMedicationDispenseByAuthorization 
 } from "../services/medicationDispense";
+import { mapMedicationDispenseResponse } from "../utils/medDispenseMapper";
 
 export const useMedDispense = () => {
     const [data, setData] = useState(null)
@@ -23,6 +24,8 @@ export const useMedDispense = () => {
             } else {
                 throw new Error("Debe enviar numAutorizacion o tipoDocumento + numeroIdentificacion");
             }
+            result = mapMedicationDispenseResponse(result)
+            console.log(result)
             setData(result)
         } catch (error) {
             const msg = error.response?.data?.message || error.message || "Error desconocido en el hook";

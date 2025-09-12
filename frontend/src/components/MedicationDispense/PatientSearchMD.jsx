@@ -52,7 +52,7 @@ export const PatientSearchMD = ({onSearch}) => {
   }
 
   return (
-    <div className="container mt-4 p-4 border rounded shadow w-75">
+    <div className="container mt-4 p-4 border rounded shadow w-75 bg-white">
       <h4 className="mb-3 text-center">Consulta de afiliado</h4>
 
       <div className="row align-items-center">
