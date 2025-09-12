@@ -1,8 +1,26 @@
 export function mapMedicationDispenseResponse(apiResponse) {
-    if (!Array.isArray(apiResponse) || apiResponse.length === 0) return null;
+    if (!Array.isArray(apiResponse) || apiResponse.length === 0) {
+        return { error: "Respuesta vacía del servidor" };
+    }
 
     const bundle = apiResponse[0]; // 👈 nos quedamos con el primer bundle
-    if (!bundle?.entry) return null;
+
+      if (!bundle?.entry) {
+            return { error: "Respuesta sin entradas (entry) del servidor" };
+        }
+
+    const firstResource = bundle.entry[0];
+      // 👇 Captura OperationOutcome
+    if (firstResource?.resourceType === "OperationOutcome") {
+        const issue = firstResource.issue?.[0]; 
+        const msg =
+        issue?.details?.text ||
+        issue?.details?.coding?.[0]?.display ||
+        "Error desconocido en la autorización";
+        throw new Error(msg);  // 👈 aquí lanzamos
+    }
+
+    // if (!bundle?.entry) return null;
 
     const patientEntry = bundle.entry.find(
         e => e.resource.resourceType === "Patient"
@@ -42,6 +60,7 @@ export function mapMedicationDispenseResponse(apiResponse) {
             ?.value || 0,
         prescription: med.authorizingPrescription?.display,
         location: med.location?.display,
+        status: med?.status
         };
     });
 

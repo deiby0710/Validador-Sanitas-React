@@ -1,6 +1,7 @@
 import { safeValue } from "../../utils/formatters"
 
 export const MedicationsList = ({ medications }) => {
+    if (!medications) return null;
     if (!medications || medications.length === 0) {
         return (
         <div className="container mt-4 p-4 border rounded shadow w-75 bg-white">
@@ -22,6 +23,7 @@ export const MedicationsList = ({ medications }) => {
                 <th>Cantidad</th>
                 <th>Autorización</th>
                 <th>Ubicación</th>
+                <th>Estado</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,6 +34,7 @@ export const MedicationsList = ({ medications }) => {
                     <td>{safeValue(med?.quantity, "")}</td>
                     <td>{safeValue(med?.prescription, "")}</td>
                     <td>{safeValue(med?.location, "")}</td>
+                    <td>{safeValue(med?.status, "Desconocido")}</td>
                 </tr>
                 ))}
             </tbody>

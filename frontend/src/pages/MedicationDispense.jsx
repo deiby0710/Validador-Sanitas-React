@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { MedicationsList } from "../components/MedicationDispense/MedicationList"
-import { LocationCardMD } from "../components/MedicationDispense/LocationCardMD"
+import { PrescriptionMD } from "../components/MedicationDispense/PrescriptionMD"
 import { PatientSearchMD } from "../components/MedicationDispense/PatientSearchMD"
 import { PatientSummaryMD } from "../components/MedicationDispense/PatientSummaryMD"
 import { useMedDispense } from "../hooks/useMedDispense"
@@ -32,6 +32,7 @@ export const MedicationDispense = () => {
         <div className="d-flex justify-content-center align-items-center vh-100 flex-column">
             <PatientSearchMD onSearch={handleSearch}/>
             <PatientSummaryMD patient={data?.patient}/>
+            <PrescriptionMD prescriptions={data?.prescriptions}/>
             <MedicationsList medications={data?.medications}/>
         </div>
     )

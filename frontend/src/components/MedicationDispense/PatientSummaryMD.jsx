@@ -1,6 +1,6 @@
 import { safeValue } from "../../utils/formatters"
 export const PatientSummaryMD = ({ patient }) => {
-
+    if (!patient) return null;
     return (
         <div className="container mt-4 p-4 border rounded shadow w-75 bg-white">
             <h5>Paciente</h5>
