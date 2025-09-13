@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { UserInfoGeneral } from "../components/PatientSummary/UserInfoGeneral";
 import { PatientDetails } from "../components/PatientSummary/PatientDetails";
@@ -106,6 +107,14 @@ export const PatientSummary = () => {
             state: { numeroAutorizacion: numero }
         });
     }
+
+    useEffect(() => {
+        // Este efecto se ejecuta cada vez que cambia la ruta:
+        return () => {
+            // Si quieres hacer algo solo cuando sale de una ruta específica:
+            closeAlert();
+        }
+    }, [location.pathname]);
     
     return (
         <div className="container py-3">

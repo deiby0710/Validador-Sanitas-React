@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SearchForm } from '../components/PatientSearch/SearchForm';
 import { RadioOptionList } from '../components/PatientSearch/RadioOptionList';
 import { defaultAlert } from '../utils/alert';
 import { useNavigate } from 'react-router-dom';
+import { closeAlert } from '../utils/alert';
 
 export const PatientForm = () => {
     const [results, setResults] = useState(null);
@@ -29,6 +30,13 @@ export const PatientForm = () => {
             });
         }
     };
+    useEffect(() => {
+        // Este efecto se ejecuta cada vez que cambia la ruta:
+        return () => {
+            // Si quieres hacer algo solo cuando sale de una ruta específica:
+            closeAlert();
+        }
+    }, [location.pathname]);
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">
