@@ -1,4 +1,4 @@
-import { loginS } from "./login.service";
+import { loginS } from "./login.service.js";
 
 export const login = async(req, res) => {
     const {username, password} = req.body
@@ -18,7 +18,7 @@ export const login = async(req, res) => {
         })
     } catch (error) {
         if (error.message === 'USUARIO_NO_ENCONTRADO') {
-            return res.status(400).json({ error: 'Usuario no encontrado'})
+            return res.status(404).json({ error: 'Usuario no encontrado'})
         }
         if (error.message === 'PASSWORD_INCORRECTA') {
             return res.status(401).json({error: 'Contraseña incorrecta'})

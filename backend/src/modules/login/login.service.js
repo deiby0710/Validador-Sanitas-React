@@ -19,6 +19,6 @@ export const loginS = async(username, password) => {
 
     return {
         token,
-        admin: { username: user.username, sede: user.sede }
+        user: { username: user.username, sede: user.sede }
     }
 }
