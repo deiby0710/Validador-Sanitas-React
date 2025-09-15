@@ -4,7 +4,7 @@ import { Autorizacion } from '../pages/authorization'
 import { PatientForm } from '../pages/PatientForm'
 import { PatientSummary } from '../pages/PatientSummary'
 import { MedicationDispense } from '../pages/MedicationDispense'
-
+import { Menu } from '../pages/Menu'
 export const AppRouter = () => {
     return (
         <Routes>
@@ -14,6 +14,7 @@ export const AppRouter = () => {
             <Route path='/usuario' element={<PatientSummary/>} />
             <Route path='/autorizacion' element={<Autorizacion/>}/>
             <Route path='/medicationDispense' element={<MedicationDispense/>}/>
+            <Route path='/menu' element={<Menu/>}/>
         </Routes>
     )
 }

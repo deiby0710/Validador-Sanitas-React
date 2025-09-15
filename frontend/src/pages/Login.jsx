@@ -17,7 +17,7 @@ export const Login = () => {
         if (result.ok) {
             timedAlert('success', `¡Bienvenido ${username}!`)
             setTimeout(() => {
-                navigate('/validador')
+                navigate('/menu')
             }, 1500)
         } else {
             defaultAlert('error', 'Error al inciar sesión', 'Contraseña o usuario incorrecto')
