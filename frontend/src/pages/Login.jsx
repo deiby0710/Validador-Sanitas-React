@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
-import users from "../data/users.json";
 import { defaultAlert, timedAlert } from "../utils/alert";
+import { login } from "../services/login.service";
 
 export const Login = () => {
     const [username, setUsername] = useState('');
@@ -13,8 +13,8 @@ export const Login = () => {
 
         if (!username.trim() || !password.trim()) return defaultAlert('warning','Campos incompletos','Digite Usuario y Contraseña.');
 
-        const user = users.find(u => u.username === username && u.password === password)
-        if (user) {
+        const result =  await login({username, password})
+        if (result.ok) {
             timedAlert('success', `¡Bienvenido ${username}!`)
             setTimeout(() => {
                 navigate('/validador')

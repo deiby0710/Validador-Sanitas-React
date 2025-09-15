@@ -5,6 +5,7 @@ import avicenaRoutes from './src/modules/avicena/avicena.routes.js';
 import autorizacionesRoutes from './src/modules/authorisation/auth.routes.js'
 import medicationDispense from './src/modules/medDispense/medDispense.routes.js'
 import login from './src/modules/login/login.routes.js'
+import { verifyTokenMiddleware } from './src/middlewares/login.middleware.js';
 import dotenv from 'dotenv';
 
 dotenv.config() // Cargamos las variables de entorno
@@ -16,10 +17,10 @@ const app = express();
 app.use(cors()); // Permitir peticiones desde otros dominios
 app.use(express.json()); // Habilitar recepción de JSON en las peticiones
 
-app.use('/api/pacientes', patientsRoutes);
-app.use('/api/avicena', avicenaRoutes)
-app.use('/api/autorizacion',autorizacionesRoutes)
-app.use('/api/medicationDispense', medicationDispense)
+app.use('/api/pacientes', verifyTokenMiddleware, patientsRoutes);
+app.use('/api/avicena', verifyTokenMiddleware, avicenaRoutes)
+app.use('/api/autorizacion', verifyTokenMiddleware, autorizacionesRoutes)
+app.use('/api/medicationDispense', verifyTokenMiddleware,medicationDispense)
 app.use('/api/login', login)
 
 app.listen(port, () => {
