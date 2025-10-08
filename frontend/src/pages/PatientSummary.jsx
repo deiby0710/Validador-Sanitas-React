@@ -48,7 +48,7 @@ export const PatientSummary = () => {
         producto: `${data?.codigoProducto} ${data?.nombreProducto}`,
         tipoDocumento: data?.tipoDocumento,
         fechaNacimiento: data?.fechaNacimiento,
-        plan: `${data?.codigoPlan} ${data?.nombrePlan}`,
+        plan: `${data?.codigoPlan} ${data?.motivoEstado}`,
         numeroDocumento: data?.numeroDocumento,
         edad: data?.edad,
         contrato: data?.contrato,
