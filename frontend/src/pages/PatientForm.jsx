@@ -7,11 +7,13 @@ import { closeAlert } from '../utils/alert';
 
 export const PatientForm = () => {
     const [results, setResults] = useState(null);
+    const [numberUser, setNumUser] = useState("")
     const [selected, setSelected] = useState("");
     
     const navigate = useNavigate();
 
-    const handleRadioChange = (codigo) => {
+    const handleRadioChange = (codigo, numUser) => {
+        setNumUser(numUser)
         setSelected(codigo);
     }
 
@@ -21,11 +23,13 @@ export const PatientForm = () => {
             return;
         } else {
             const codigo = selected;
+            const numUser = numberUser;
             navigate('/usuario',{
                 state:{
                     codigo,
                     tipo: results.tipo,
                     cedula: results.cedula,
+                    numUser,
                 }
             });
         }

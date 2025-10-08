@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { basicData, consultaAfiliado, copago } from "../services/patientService";
 
-export const usePatientData = (tipo, cedula, codigoProducto) => {
+export const usePatientData = (tipo, cedula, codigoProducto, numUser) => {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -58,7 +58,7 @@ export const usePatientData = (tipo, cedula, codigoProducto) => {
 
       try {
         const afiliado = await consultaAfiliado(tipo, cedula, codigoProducto);
-        result = { ...result, ...parseConsultaAfiliadoData(afiliado) };
+        result = { ...result, ...parseConsultaAfiliadoData(afiliado, numUser) };
       } catch (err) {
         console.error("Error en consultaAfiliado", err);
       }
@@ -82,7 +82,7 @@ export const usePatientData = (tipo, cedula, codigoProducto) => {
 
 // Dentro de usePatientData
 
-const parseConsultaAfiliadoData = (data) => {
+const parseConsultaAfiliadoData = (data, numUser) => {
   const patientData = data.coverFamilyResponse?.[0] || {};
 
   const insuranceIdentifiers = patientData.insurancePlan?.identifier || [];
@@ -101,7 +101,7 @@ const parseConsultaAfiliadoData = (data) => {
     nombrePlan: contractIdentifiers.find(item => item.type === "NOMBRE_PLAN")?.value || "",
     contrato: contractIdentifiers.find(item => item.type === "CONTRATO")?.value || "",
     familia: contractIdentifiers.find(item => item.type === "FAMILIA")?.value || "",
-    numUsuario: identifiers.find(item => item.type === "NUM_USR")?.value || "",
+    numUsuario: numUser || identifiers.find(item => item.type === "NUM_USR")?.value || "",
     estado: patient.status || "",
     tipoDocumento: identifiers.find(item => item.type === "TIPO_IDENTIFICACION")?.value || "",
     numeroDocumento: identifiers.find(item => item.type === "NUMERO_IDENTIFICACION")?.value || "",

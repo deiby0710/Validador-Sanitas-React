@@ -8,9 +8,9 @@ import { loadingAlert, closeAlert, defaultAlert } from "../utils/alert";
 
 export const PatientSummary = () => {
     const location = useLocation();
-    const { codigo, tipo, cedula } = location.state || {};
+    const { codigo, tipo, cedula, numUser } = location.state || {};
 
-    const {data, loading, error} = usePatientData(tipo, cedula, codigo);
+    const {data, loading, error} = usePatientData(tipo, cedula, codigo, numUser);
     const navigate = useNavigate();
 
     if (loading){

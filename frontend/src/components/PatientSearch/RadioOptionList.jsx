@@ -12,6 +12,7 @@ export const RadioOptionList = ({ options, selected, onChange, onContinue }) => 
                 const contrato = item.contract.identifier.find(i => i.type === "CONTRATO")?.value || "N/A";
                 const estadoCodigo = item.coverage[0]?.status?.code || "N/A";
                 const codigoProducto = item.insurancePlan.identifier.find(i => i.type === "CODIGO_PRODUCTO")?.value || "30";
+                const numUser = item.coverage[0]?.beneficiary?.identifier?.find(i => i.type ==="NUM_USR")?.value || "";
 
                 const valueRadio = `${producto} - Plan ${nombrePlan} - Contrato ${contrato} - Familia ${familia} - ${estadoCodigo}`;
 
@@ -23,7 +24,7 @@ export const RadioOptionList = ({ options, selected, onChange, onContinue }) => 
                         value={valueRadio}
                         id={`opcion${index}`}
                         // checked={selected === codigoProducto}
-                        onChange={() => onChange(codigoProducto)}
+                        onChange={() => onChange(codigoProducto, numUser)}
                         />
                         <label htmlFor={`opcion${index}`} className="LabelRadioButton ms-2">
                             {valueRadio}
