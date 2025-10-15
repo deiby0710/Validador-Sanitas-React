@@ -20,7 +20,7 @@ export const validarPaciente = async (tipo, cedula) => {
       ]
     },
     swFamily: false,
-    lastValid: false,
+    lastValid: true,
     date: ''
   };
   try {
