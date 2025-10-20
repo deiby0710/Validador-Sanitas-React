@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { validarPaciente } from '../../services/patientService';
+import { validarPaciente, consultaAfiliado } from '../../services/patientService';
 import { defaultAlert, loadingAlert, closeAlert } from '../../utils/alert';
 
-export const SearchForm = ({ onSearch }) => {
+export const SearchForm = ({ onSearch, onSearchCA }) => {
     const [tipo, setTipoId] = useState('');
     const [cedula, setDocumento] = useState('');
 
@@ -17,12 +17,14 @@ export const SearchForm = ({ onSearch }) => {
         loadingAlert()
         try { 
             const data = await validarPaciente(tipo, cedula); // Hacemos la peticion
+            const dataCA = await consultaAfiliado(tipo, cedula, '')
 
             if (!data || !data.data || data.data.length === 0) {
                 throw new Error('Paciente no encontrado.');
             }
             // Enviamos los resultados al componente padre
             onSearch({datos: data.data, tipo, cedula});
+            onSearchCA({datosCA: dataCA.coverFamilyResponse})
             closeAlert()
         } catch (error){
             closeAlert()
