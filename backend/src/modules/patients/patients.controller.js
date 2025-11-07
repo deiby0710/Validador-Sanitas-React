@@ -1,4 +1,9 @@
-import { validatePatient, validatorPatient, getPatientBasicData, copayAmount2 } from "./patients.service.js";
+import { 
+    validatePatient, 
+    validatorPatient, 
+    getPatientBasicData 
+    // copayAmount2 
+} from "./patients.service.js";
 
 export const validatePatientController = async (req, res) => {
     try {
@@ -84,26 +89,26 @@ export const getPatientBasicDataController = async (req, res) => {
 };
 
 // Controlador CopyAmount
-export const copayAmount2Controller = async(req,res)=>{
-    try {
-        const { numIden, tipoIden } = req.body
-        const authHeader = req.headers["Authorization"];
-        if (!numIden || !tipoIden){
-            return res.status(400).json({ message: "Faltan parametros requeridos."})
-        }
-        if (!authHeader) {
-            return res.status(401).json({ message: "Falta el token de autorización en el encabezado." });
-        }
-        const data = await copayAmount2(numIden, tipoIden, authHeader);
-        if(!data){
-            return res.status(404).json({message: "No se encontraron datos en el copay amount"})
-        }
-        res.json(data)
-    } catch (error) {
-        console.error("Error en copayAmount2Controller: ", error)
-        res.status(500).json({
-            message: "Error obteniendo datos del paciente (Copay Amount)",
-            error: error.message
-        })
-    }
-}
+// export const copayAmount2Controller = async(req,res)=>{
+//     try {
+//         const { numIden, tipoIden } = req.body
+//         const authHeader = req.headers["Authorization"];
+//         if (!numIden || !tipoIden){
+//             return res.status(400).json({ message: "Faltan parametros requeridos."})
+//         }
+//         if (!authHeader) {
+//             return res.status(401).json({ message: "Falta el token de autorización en el encabezado." });
+//         }
+//         const data = await copayAmount2(numIden, tipoIden, authHeader);
+//         if(!data){
+//             return res.status(404).json({message: "No se encontraron datos en el copay amount"})
+//         }
+//         res.json(data)
+//     } catch (error) {
+//         console.error("Error en copayAmount2Controller: ", error)
+//         res.status(500).json({
+//             message: "Error obteniendo datos del paciente (Copay Amount)",
+//             error: error.message
+//         })
+//     }
+// }

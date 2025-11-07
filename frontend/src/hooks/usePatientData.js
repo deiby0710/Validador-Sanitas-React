@@ -63,12 +63,12 @@ export const usePatientData = (tipo, cedula, codigoProducto, numUser) => {
         console.error("Error en consultaAfiliado", err);
       }
 
-      try {
-        const copagoResp = await copago(tipo, cedula);
-        result = { ...result, ...parseCopagoData(copagoResp) };
-      } catch (err) {
-        console.error("Error en copago", err);
-      }
+      // try {
+      //   const copagoResp = await copago(tipo, cedula);
+      //   result = { ...result, ...parseCopagoData(copagoResp) };
+      // } catch (err) {
+      //   console.error("Error en copago", err);
+      // }
 
       setData(result);
       setLoading(false);

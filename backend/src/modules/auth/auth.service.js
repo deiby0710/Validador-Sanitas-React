@@ -2,13 +2,12 @@ const obtenerToken = async () => {
     try {
         const params = new URLSearchParams();
         params.append("grant_type", "password");
-        params.append("username", "CO11VG60AMPGENHOSPI");
-        params.append("password", "Tyg4QMTLBivW3iyB6oVox");
-
-        const response = await fetch("https://papi.colsanitas.com/token", {
+        params.append("username", process.env.USERNAME_API);
+        params.append("password", process.env.PASSWORD_API);
+        const response = await fetch("https://api.colsanitas.com/token", {
             method: "POST",
             headers: {
-                'Authorization': 'Basic YzVhTklYc1NtSm9ZTERmY2tHX25KUThKZXNzYTprN19ncm5zcGtWOUZQOWY3X1FBNk52aHQzSXdh',
+                'Authorization': 'Basic WWV2bzMydWNwODdOU19Iakxpc1Y2VmR2eHRBYTp6Z3Noc3VqRXBPQW42TmpQNnBUaGY5X0IwdU1h',
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             body: params.toString()
