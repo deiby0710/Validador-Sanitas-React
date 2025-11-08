@@ -9,8 +9,10 @@ import { verifyTokenMiddleware } from './src/middlewares/login.middleware.js';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { testConnection } from './config/db.js';
 
 dotenv.config() // Cargamos las variables de entorno
+await testConnection();
 const port = process.env.PORT || 4000;
 
 const app = express();

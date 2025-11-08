@@ -1,8 +1,9 @@
 import { 
     validatePatient, 
     validatorPatient, 
-    getPatientBasicData 
-    // copayAmount2 
+    getPatientBasicData,
+    // copayAmount2,
+    savePatientSanitas
 } from "./patients.service.js";
 
 export const validatePatientController = async (req, res) => {
@@ -112,3 +113,60 @@ export const getPatientBasicDataController = async (req, res) => {
 //         })
 //     }
 // }
+
+export const savePatientController = async (req, res) => {
+    try {
+        if (!req.body || Object.keys(req.body).length === 0) {
+            return res.status(400).json({ message: "El cuerpo de la petición está vacío." });
+        }
+        const {
+            nombre_completo,
+            compania,
+            plan,
+            contrato,
+            familia,
+            numero_usuario,
+            estado,
+            tipo_documento,
+            numero_documento,
+            telefono_principal,
+            segundo_telefono,
+            correo,
+            fecha_nacimiento, // 'YYYY-MM-DD'
+            sexo,
+            consultado_por,   // opcional: lo manda el front
+        } = req.body;
+
+        const data = [
+            nombre_completo,
+            compania,
+            plan,
+            contrato,
+            familia,
+            numero_usuario,
+            estado,
+            tipo_documento,
+            numero_documento,
+            telefono_principal,
+            segundo_telefono,
+            correo,
+            fecha_nacimiento || null,
+            sexo,
+            consultado_por || req.user?.username || 'desconocido'
+        ];
+
+        await savePatientSanitas(data);
+
+        return res.status(200).json({
+            ok: true,
+            message: 'Paciente guardado/actualizado correctamente',
+        });
+    } catch (error) {
+        console.error('Error en savePatientSanitasController:', error);
+        return res.status(500).json({
+            ok: false,
+            message: 'Error guardando/actualizando paciente',
+            error: error.message,
+        });
+    }
+};

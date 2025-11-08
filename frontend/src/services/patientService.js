@@ -89,3 +89,24 @@ export const basicData = async (tipo, cedula) => {
     throw error;
   }
 }
+
+export const savePatientSanitas = async (payload) => {
+  try {
+    const response = await api.post('/api/pacientes/guardarPaciente', payload);
+    return {
+      ok: true,
+      data: response.data,
+      error: null,
+    };
+  } catch (error) {
+    console.error('Error en savePatientSanitas (frontend): ', error);
+    return {
+      ok: false,
+      data: null,
+      error:
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        'Error al guardar el paciente',
+    };
+  }
+};

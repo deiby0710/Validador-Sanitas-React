@@ -5,12 +5,14 @@ import { PatientDetails } from "../components/PatientSummary/PatientDetails";
 import { AuthorizationTable } from "../components/PatientSummary/AuthorizationTable";
 import { usePatientData } from "../hooks/usePatientData";
 import { loadingAlert, closeAlert, defaultAlert } from "../utils/alert";
+import { useSavePatientSanitas } from "../hooks/useSavePatientSanitas";
 
 export const PatientSummary = () => {
     const location = useLocation();
     const { codigo, tipo, cedula, numUser } = location.state || {};
 
     const {data, loading, error} = usePatientData(tipo, cedula, codigo, numUser);
+    useSavePatientSanitas(data, { enabled: !loading && !error });
     const navigate = useNavigate();
 
     if (loading){

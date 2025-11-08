@@ -1,3 +1,5 @@
+import pool from '../../../config/db.js';
+
 export const validatePatient = async (requestBody, authHeader) => {
     try {
         const response = await fetch(
@@ -143,3 +145,46 @@ export const getPatientBasicData = async (identificationNumber, identificationTy
 //       throw error
 //     }
 // }
+
+export const savePatientSanitas = async (data) => {
+    try {
+        const sql = `
+            INSERT INTO pacientes_sanitas (
+                nombre_completo,
+                compania,
+                plan,
+                contrato,
+                familia,
+                numero_usuario,
+                estado,
+                tipo_documento,
+                numero_documento,
+                telefono_principal,
+                segundo_telefono,
+                correo,
+                fecha_nacimiento,
+                sexo,
+                consultado_por
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON DUPLICATE KEY UPDATE
+                nombre_completo    = VALUES(nombre_completo),
+                compania           = VALUES(compania),
+                plan               = VALUES(plan),
+                contrato           = VALUES(contrato),
+                familia            = VALUES(familia),
+                numero_usuario     = VALUES(numero_usuario),
+                estado             = VALUES(estado),
+                telefono_principal = VALUES(telefono_principal),
+                segundo_telefono   = VALUES(segundo_telefono),
+                correo             = VALUES(correo),
+                fecha_nacimiento   = VALUES(fecha_nacimiento),
+                sexo               = VALUES(sexo),
+                consultado_por     = VALUES(consultado_por)
+        `;
+        const result = await pool.execute(sql, data);
+        return result
+    } catch (error) {
+        console.error('Error en saveOrUpdatePatientSanitas: ', error);
+        throw error;
+    }
+}
