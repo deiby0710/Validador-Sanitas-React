@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = axios.create({
-    baseURL: 'http://190.147.27.194:4000'
+    baseURL: import.meta.env.VITE_API_BASE_URL,
 })
 
 // Interceptor para añadir token automáticamente
