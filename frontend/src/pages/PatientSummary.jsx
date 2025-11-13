@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { UserInfoGeneral } from "../components/PatientSummary/UserInfoGeneral";
 import { PatientDetails } from "../components/PatientSummary/PatientDetails";
 import { AuthorizationTable } from "../components/PatientSummary/AuthorizationTable";
+import { TittleValidator } from "../components/PatientSummary/TittleValidator";
 import { usePatientData } from "../hooks/usePatientData";
 import { loadingAlert, closeAlert, defaultAlert } from "../utils/alert";
 import { useSavePatientSanitas } from "../hooks/useSavePatientSanitas";
@@ -120,6 +121,7 @@ export const PatientSummary = () => {
     
     return (
         <div className="container py-3">
+            <TittleValidator/>
             <UserInfoGeneral userGeneralData={promptGeneralData}/>
             <PatientDetails PatientDetailsData={promptDetails}/>
             {/* <AuthorizationTable autorizaciones={promptAutorizaciones} onConsultar={handleConsultar}/> */}

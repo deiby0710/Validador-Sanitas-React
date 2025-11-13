@@ -1,0 +1,20 @@
+.title-container {
+    text-align: center;
+    margin: 20px 0 30px 0;
+}
+
+.title-main {
+    font-size: 32px;
+    font-weight: 800;
+    color: #6e7781; /* Azul profesional tipo EPS */
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.title-sub {
+    font-size: 20px;
+    font-weight: 500;
+    color: #333;
+    margin-top: 0;
+}

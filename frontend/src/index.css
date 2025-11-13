@@ -7,3 +7,88 @@ body {
     min-height: 100vh; /* permite crecer verticalmente */
     margin: 0;                  
   }
+
+.tabla-info {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  table-layout: fixed;   /* 👈 MUY IMPORTANTE: evita desorden */
+}
+
+.tabla-info td {
+  padding: 6px 10px;
+  vertical-align: top;
+  font-size: 15px;
+}
+
+.label {
+  font-weight: bold;
+  width: 150px;        /* ancho fijo garantiza alineación */
+  white-space: nowrap; /* evita salto de línea en etiquetas */
+}
+
+.value {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 250px;    /* controla valores largos */
+}
+
+/* ============================
+    ESTILOS SOLO PARA IMPRESIÓN
+   ============================ */
+@media print {
+
+    /* 🔹 Quitar fondo de la página (no imprime bien) */
+    body {
+        background: white !important;
+        background-image: none !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        margin: 0;
+    }
+
+    /* 🔹 Ajustar margenes del PDF/hoja */
+    @page {
+        margin: 12mm;
+    }
+
+    /* 🔹 Asegurar que todo el contenido use el ancho completo */
+    .container, .p-4, .border, .rounded {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+    }
+
+    /* 🔹 Texto más compacto para que entre mejor */
+    .tabla-info td {
+        padding: 4px 6px !important;
+        font-size: 13px !important;
+    }
+
+    /* 🔹 Ajuste de ancho máximo para textos largos */
+    .value {
+        max-width: 200px !important;
+    }
+
+    /* 🔹 Títulos en negro para impresión limpia */
+    h1, h2, h3, h4 {
+        color: #000 !important;
+        margin: 0 0 8px 0 !important;
+    }
+
+    /* 🔹 Quitar botones, inputs o elementos interactivos */
+    button,
+    input,
+    .no-print {
+        display: none !important;
+    }
+
+    /* 🔹 Quitar sombras, bordes innecesarios */
+    .card,
+    .shadow,
+    .border {
+        border: none !important;
+        box-shadow: none !important;
+    }
+}
