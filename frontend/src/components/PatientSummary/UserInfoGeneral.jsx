@@ -76,7 +76,7 @@ export const UserInfoGeneral = ({userGeneralData}) => {
                         <td className="label">Número de Usuario:</td>
                         <td className="value" colSpan={3}>{safeValue(numeroUsuario)}</td>
 
-                        <td className="label fs-5">Estado:</td>
+                        <td className="label">Estado:</td>
                         <td className="value fw-bold fs-5">{safeValue(estado)}</td>
                     </tr>
 

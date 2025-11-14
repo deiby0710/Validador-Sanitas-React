@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { UserInfoGeneral } from "../components/PatientSummary/UserInfoGeneral";
 import { PatientDetails } from "../components/PatientSummary/PatientDetails";
@@ -7,10 +7,12 @@ import { TittleValidator } from "../components/PatientSummary/TittleValidator";
 import { usePatientData } from "../hooks/usePatientData";
 import { loadingAlert, closeAlert, defaultAlert } from "../utils/alert";
 import { useSavePatientSanitas } from "../hooks/useSavePatientSanitas";
+import { PrintFooter } from "../components/Print/PrintFooter";
 
 export const PatientSummary = () => {
     const location = useLocation();
     const { codigo, tipo, cedula, numUser } = location.state || {};
+    const [fechaConsulta, setFechaConsulta] = useState("");
 
     const {data, loading, error} = usePatientData(tipo, cedula, codigo, numUser);
     useSavePatientSanitas(data, { enabled: !loading && !error });
@@ -118,13 +120,30 @@ export const PatientSummary = () => {
             closeAlert();
         }
     }, [location.pathname]);
+
+    useEffect(() => {
+        const ahora = new Date();
+        const fecha = ahora.toLocaleString("es-CO", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        });
+
+        setFechaConsulta(fecha);
+    }, []);
     
     return (
-        <div className="container py-3">
-            <TittleValidator/>
-            <UserInfoGeneral userGeneralData={promptGeneralData}/>
-            <PatientDetails PatientDetailsData={promptDetails}/>
-            {/* <AuthorizationTable autorizaciones={promptAutorizaciones} onConsultar={handleConsultar}/> */}
-        </div>
+        <>
+            <div className="container py-3">
+                <TittleValidator/>
+                <UserInfoGeneral userGeneralData={promptGeneralData}/>
+                <PatientDetails PatientDetailsData={promptDetails}/>
+                {/* <AuthorizationTable autorizaciones={promptAutorizaciones} onConsultar={handleConsultar}/> */}
+            </div>
+            <PrintFooter fechaConsulta={fechaConsulta}/>
+        </>
     )
 }
