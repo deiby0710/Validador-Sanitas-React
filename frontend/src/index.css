@@ -8,32 +8,6 @@ body {
     margin: 0;                  
   }
 
-.tabla-info {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-  table-layout: fixed;   /* 👈 MUY IMPORTANTE: evita desorden */
-}
-
-.tabla-info td {
-  padding: 6px 10px;
-  vertical-align: top;
-  font-size: 14px;
-  word-break: break-word;
-}
-
-.label {
-  font-weight: bold;
-  width: 150px;        /* ancho fijo garantiza alineación */
-  white-space: nowrap; /* evita salto de línea en etiquetas */
-}
-
-.value {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  max-width: 250px;    /* controla valores largos */
-}
-
 /* ESTILOS IMPRESION */
 @media print {
   .print-only {
@@ -45,9 +19,17 @@ body {
     left: 0;
     right: 0;
     width: 100%;
-    font-size: 12px;
+    font-size: 8px;
     color: #000;
     display: flex;
     justify-content: space-between;
+  }
+  body {
+    font-size: 10px;
+  }
+  .container {
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
   }
 }

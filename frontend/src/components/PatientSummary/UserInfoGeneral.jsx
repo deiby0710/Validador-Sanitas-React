@@ -22,67 +22,66 @@ export const UserInfoGeneral = ({userGeneralData}) => {
     return (
         <div className="p-4 border rounded container bg-white">
             <h4 className="text-center mb-4">Consulta Afiliado</h4>
-            <table className="tabla-info">
+            <table className="tabla-info w-100 text-break">
                 <tbody>
                     <tr>
-                        <td className="label">Nombre:</td>
-                        <td className="value" colSpan={5}>{safeValue(nombre)}</td>
+                        <td className="fw-bold p-1">Nombre:</td>
+                        <td colSpan={5}>{safeValue(nombre)}</td>
                     </tr>
                     <tr>
-                        <td className="label">Compañía:</td>
-                        <td className="value">{safeValue(producto)}</td>
+                        <td className="fw-bold p-1">Compañía:</td>
+                        <td>{safeValue(producto)}</td>
 
-                        <td className="label">Tipo Documento:</td>
-                        <td className="value">{safeValue(tipoDocumento)}</td>
+                        <td className="fw-bold p-1">Tipo Documento:</td>
+                        <td>{safeValue(tipoDocumento)}</td>
 
-                        <td className="label">Fecha Nacimiento:</td>
-                        <td className="value">{safeValue(fechaNacimiento)}</td>
-                    </tr>
-
-                    <tr>
-                        <td className="label">Plan:</td>
-                        <td className="value">{safeValue(plan)}</td>
-
-                        <td className="label">Número Documento:</td>
-                        <td className="value">{safeValue(numeroDocumento)}</td>
-
-                        <td className="label">Edad:</td>
-                        <td className="value">{safeValue(edad)}</td>
+                        <td className="fw-bold p-1">Fecha Nacimiento:</td>
+                        <td>{safeValue(fechaNacimiento)}</td>
                     </tr>
 
                     <tr>
-                        <td className="label">Contrato:</td>
-                        <td className="value">{safeValue(contrato)}</td>
+                        <td className="fw-bold p-1">Plan:</td>
+                        <td>{safeValue(plan)}</td>
 
-                        <td className="label">Teléfono Principal:</td>
-                        <td className="value">{safeValue(telefono)}</td>
+                        <td className="fw-bold p-1">Número Documento:</td>
+                        <td>{safeValue(numeroDocumento)}</td>
 
-                        <td className="label">Sexo:</td>
-                        <td className="value">{safeValue(sexo)}</td>
+                        <td className="fw-bold p-1">Edad:</td>
+                        <td>{safeValue(edad)}</td>
                     </tr>
 
                     <tr>
-                        <td className="label">Familia:</td>
-                        <td className="value">{safeValue(familia)}</td>
+                        <td className="fw-bold p-1">Contrato:</td>
+                        <td>{safeValue(contrato)}</td>
 
-                        <td className="label">Segundo Teléfono:</td>
-                        <td className="value">{safeValue(segundoTelefono)}</td>
+                        <td className="fw-bold p-1">Teléfono Principal:</td>
+                        <td>{safeValue(telefono)}</td>
 
-                        <td className="label">Correo Electrónico:</td>
-                        <td className="value">{safeValue(correo)}</td>
+                        <td className="fw-bold p-1">Sexo:</td>
+                        <td>{safeValue(sexo)}</td>
                     </tr>
 
                     <tr>
-                        <td className="label">Número de Usuario:</td>
-                        <td className="value" colSpan={3}>{safeValue(numeroUsuario)}</td>
+                        <td className="fw-bold p-1">Familia:</td>
+                        <td>{safeValue(familia)}</td>
 
-                        <td className="label">Estado:</td>
-                        <td className="value fw-bold fs-5">{safeValue(estado)}</td>
+                        <td className="fw-bold p-1">Segundo Teléfono:</td>
+                        <td>{safeValue(segundoTelefono)}</td>
+
+                        <td className="fw-bold p-1">Correo Electrónico:</td>
+                        <td>{safeValue(correo)}</td>
+                    </tr>
+
+                    <tr>
+                        <td className="fw-bold p-1">Número de Usuario:</td>
+                        <td colSpan={3}>{safeValue(numeroUsuario)}</td>
+
+                        <td className="fw-bold p-1">Estado:</td>
+                        <td className="fw-bold p-1 fs-5">{safeValue(estado)}</td>
                     </tr>
 
                 </tbody>
             </table>
-
         </div>
     )
 }
