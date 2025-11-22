@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "start:dev": "NODE_ENV=development npx nodemon server.js",
+    "start:pre": "NODE_ENV=preproduction npx nodemon server.js",
+    "start:prod": "NODE_ENV=production pm2 start server.js --name Validador-sanitas",
+    "start:prod:restart": "NODE_ENV=production pm2 restart Validador-sanitas"
   },
   "keywords": [],
   "author": "",

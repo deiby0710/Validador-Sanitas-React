@@ -4,10 +4,10 @@ const obtenerToken = async () => {
         params.append("grant_type", "password");
         params.append("username", process.env.USERNAME_API);
         params.append("password", process.env.PASSWORD_API);
-        const response = await fetch("https://api.colsanitas.com/token", {
+        const response = await fetch(process.env.SANITAS_TOKEN_URL, {
             method: "POST",
             headers: {
-                'Authorization': 'Basic WWV2bzMydWNwODdOU19Iakxpc1Y2VmR2eHRBYTp6Z3Noc3VqRXBPQW42TmpQNnBUaGY5X0IwdU1h',
+                'Authorization': process.env.SANITAS_AUTH_BASIC,
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             body: params.toString()

@@ -11,7 +11,15 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { testConnection } from './config/db.js';
 
-dotenv.config() // Cargamos las variables de entorno
+const environment = process.env.NODE_ENV || "development";
+
+dotenv.config({
+  path: `.env.${environment}`
+});
+
+console.log(`🌎 Ambiente cargado: ${environment}`);
+console.log(`📁 Archivo usado: .env.${environment}`);
+
 await testConnection();
 const port = process.env.PORT || 4000;
 

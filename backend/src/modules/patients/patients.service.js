@@ -3,7 +3,7 @@ import pool from '../../../config/db.js';
 export const validatePatient = async (requestBody, authHeader) => {
     try {
         const response = await fetch(
-            "https://api.colsanitas.com/osi/api/articulation/articulationOfHealthCare/coverage/v1.0.0/coverageHeader",
+            process.env.VALIDATE_PATIENT_URL,
             {
                 method: "POST",
                 headers: {
@@ -28,7 +28,7 @@ export const validatePatient = async (requestBody, authHeader) => {
 export const validatorPatient = async (requestBody, authHeader) => {
     try {
         const response = await fetch(
-            "https://api.colsanitas.com/osi/api/assurance/affiliations/affiliationsAndNewsManagements/contract/v1.0.0/cover",
+            process.env.VALIDATOR_PATIENT_URL,
             {
                 method: "POST",
                 headers: {
@@ -52,7 +52,7 @@ export const validatorPatient = async (requestBody, authHeader) => {
 
 export const getPatientBasicData = async (identificationNumber, identificationType, authHeader) => {
     try {
-        const url = `https://api.colsanitas.com/osi/api/user/userManagement/patient/v1.0.0/basicData?identificationNumber=${identificationNumber}&identificationType=${identificationType}`;
+        const url = `${process.env.BASIC_DATA_URL}identificationNumber=${identificationNumber}&identificationType=${identificationType}`;
 
         const response = await fetch(url, {
             method: "GET",

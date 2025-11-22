@@ -8,6 +8,7 @@ node_modules/
 # Variables de entorno
 .env
 *.env
+.env*
 
 # Archivos del sistema
 .DS_Store
