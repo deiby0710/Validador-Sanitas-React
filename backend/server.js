@@ -18,7 +18,6 @@ dotenv.config({
 });
 
 console.log(`🌎 Ambiente cargado: ${environment}`);
-console.log(`📁 Archivo usado: .env.${environment}`);
 
 await testConnection();
 const port = process.env.PORT || 4000;
