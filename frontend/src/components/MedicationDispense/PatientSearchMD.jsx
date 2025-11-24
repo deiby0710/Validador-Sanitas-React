@@ -6,6 +6,7 @@ export const PatientSearchMD = ({onSearch}) => {
   const [searchMode, setSearchMode] = useState("authorization");
   const [docType, setDocType] = useState("");
   const [docNumber, setDocNumber] = useState("");
+  const [technology, setTechnology] = useState("");
   const [numAuthorization,setNumAuthorization] = useState("")
 
   const documentTypes = [
@@ -26,10 +27,19 @@ export const PatientSearchMD = ({onSearch}) => {
     { value: "PT", label: "Permiso por protección temporal (PT)" },
   ];
 
+  const technologyTypes = [
+    { value: "M", label: "Medicamento"},
+    { value: "P", label: "Procedimiento"},
+    { value: "D", label: "Dispositivo"},
+    { value: "N", label: "Producto Nutricional"},
+    { value: "S", label: "Servicio Complemenetario"},
+  ];
+
   const handleToggle = (mode) => {
     setSearchMode(mode);
     setDocNumber("");
     setDocType("");
+    setTechnology("");
     setNumAuthorization("");
   };
 
@@ -41,11 +51,19 @@ export const PatientSearchMD = ({onSearch}) => {
       }
       onSearch({ numAutorizacion: numAuthorization });
     } else if (searchMode==='document') {
-      if(!docType.trim() || !docNumber.trim() ){
-        defaultAlert('warning','Campos incompletos','Digite el número y tipo de identificación.');
+      if(!docType.trim()){
+        defaultAlert('warning','Campos incompletos','Digite el tipo de identificación.');
         return ;
       }
-      onSearch({ tipoDocumento: docType, numeroIdentificacion: docNumber });
+      if(!docNumber.trim()){
+        defaultAlert('warning','Campos incompletos','Digite el número de identificación.');
+        return ;
+      }
+      if(!technology.trim()){
+        defaultAlert('warning','Campos incompletos','Digite el tipo de tecnología.');
+        return ;
+      }
+      onSearch({ tipoDocumento: docType, numeroIdentificacion: docNumber , tecnologia: technology});
     } else {
       console.log('error')
     }
@@ -102,6 +120,22 @@ export const PatientSearchMD = ({onSearch}) => {
                   value={docNumber}
                   onChange={(e) => setDocNumber(e.target.value)}
                 />
+              </div>
+
+              <div>
+                <label className="form-label">Tecnología</label>
+                <select
+                  className="form-select"
+                  value={technology}
+                  onChange={(e) => setTechnology(e.target.value)}
+                >
+                  <option value="">Seleccione una tecnología</option>
+                  {technologyTypes.map((tipe) => (
+                    <option key={tipe.value} value={tipe.value}>
+                      {tipe.label}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           )}

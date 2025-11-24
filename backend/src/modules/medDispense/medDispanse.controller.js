@@ -2,16 +2,16 @@ import { medicationDispenseByIdS, medicationDispenseByAuthorizationS } from "./m
 
 export const medicationDispenseById = async (req, res) => {
   try {
-    const { tipoDocumento, numeroIdentificacion } = req.body;
+    const { tipoDocumento, numeroIdentificacion, tecnologia } = req.body;
     const authHeader = req.headers["Authorization"];
 
-    if (!tipoDocumento || !numeroIdentificacion) {
+    if (!tipoDocumento || !numeroIdentificacion || !tecnologia) {
       return res.status(400).json({
-        message: "Falta el tipo de documento o el número de identificación."
+        message: "Falta el tipo de documento, el número de identificación o tecnologia."
       });
     }
 
-    const data = await medicationDispenseByIdS(tipoDocumento, numeroIdentificacion, authHeader);
+    const data = await medicationDispenseByIdS(tipoDocumento, numeroIdentificacion, tecnologia, authHeader);
 
     if (!data) {
       return res.status(404).json({

@@ -1,13 +1,14 @@
 import { api } from "../api/axiosConfig";
 
-export const serviceMedicationDispenseByIdentificacion = async (tipoDocumento, numeroIdentificacion) => {
+export const serviceMedicationDispenseByIdentificacion = async (tipoDocumento, numeroIdentificacion, tecnologia) => {
     const mockRequestBody = {
         "tipoDocumento": "CC",
         "numeroIdentificacion": "59820217"
     }
     const requestBody = {
         "tipoDocumento": tipoDocumento,
-        "numeroIdentificacion": numeroIdentificacion
+        "numeroIdentificacion": numeroIdentificacion,
+        "tecnologia": tecnologia
     }
     try {
         const response = await api.post('/api/medicationDispense/identificacion', requestBody)

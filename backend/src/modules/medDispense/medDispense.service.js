@@ -1,6 +1,6 @@
 import { sanitizeSanitasResponse } from "../../utils/sanitize.js";
 
-export const medicationDispenseByIdS = async (tipoDocumento,numeroIdentificacion,authHeader) => {
+export const medicationDispenseByIdS = async (tipoDocumento,numeroIdentificacion, tecnologia, authHeader) => {
   const requestBody = {
     resourceType: "Bundle",
     id: "bundle-request-medicationDispense",
@@ -9,7 +9,7 @@ export const medicationDispenseByIdS = async (tipoDocumento,numeroIdentificacion
       {
         request: {
           method: "GET",
-          url: `MedicationDispense?subject.identifier:of-type=BH|${tipoDocumento}|${numeroIdentificacion}&authorizingPrescription.category-code=M&_include=MedicationDispense:authorizingPrescription&_include=MedicationDispense:location&_include=MedicationDispense:subject`
+          url: `MedicationDispense?subject.identifier:of-type=BH|${tipoDocumento}|${numeroIdentificacion}&authorizingPrescription.category-code=${tecnologia}&_include=MedicationDispense:authorizingPrescription&_include=MedicationDispense:location&_include=MedicationDispense:subject`
         }
       }
     ]

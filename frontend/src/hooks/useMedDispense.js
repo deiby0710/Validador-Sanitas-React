@@ -10,19 +10,19 @@ export const useMedDispense = () => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
 
-    const fetchMedicationDispense = async ({tipoDocumento, numeroIdentificacion, numAutorizacion}) => {
+    const fetchMedicationDispense = async ({tipoDocumento, numeroIdentificacion, tecnologia, numAutorizacion}) => {
         setLoading(true);
         setError(null);
         setData(null);
 
         try {
             let result;
-            if(numeroIdentificacion && tipoDocumento){
-                result = await serviceMedicationDispenseByIdentificacion(tipoDocumento, numeroIdentificacion)
+            if(numeroIdentificacion && tipoDocumento && tecnologia){
+                result = await serviceMedicationDispenseByIdentificacion(tipoDocumento, numeroIdentificacion, tecnologia)
             } else if (numAutorizacion) {
                 result = await serviceMedicationDispenseByAuthorization(numAutorizacion);
             } else {
-                throw new Error("Debe enviar numAutorizacion o tipoDocumento + numeroIdentificacion");
+                throw new Error("Debe enviar numAutorizacion o tipoDocumento + numeroIdentificacion + tecnologia");
             }
             result = mapMedicationDispenseResponse(result)
             console.log(result)
