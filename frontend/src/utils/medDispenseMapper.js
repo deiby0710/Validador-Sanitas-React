@@ -56,8 +56,7 @@ export function mapMedicationDispenseResponse(apiResponse) {
             med.medication?.[0]?.medicationCodeableConcept?.code?.coding?.[0]
             ?.code,
         quantity:
-            med.dosageInstruction?.[1]?.doseAndRate?.[0]?.dose?.doseQuantity
-            ?.value || 0,
+            prescriptionEntries[0].resource?.dispenseRequest?.quantity?.value,
         prescription: med.authorizingPrescription?.display,
         location: med.location?.display,
         status: med?.status

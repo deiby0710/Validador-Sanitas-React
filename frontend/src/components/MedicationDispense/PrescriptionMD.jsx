@@ -19,9 +19,9 @@ export const PrescriptionMD = ({ prescriptions }) => {
                     <div className="col-md-4 col-12">
                         <label><strong>Repeticiones permitidas:</strong> {safeValue(prescription?.repeats, "")}</label>
                     </div>
-                    <div className="col-md-4 col-12">
+                    {/* <div className="col-md-4 col-12">
                         <label><strong>Duración esperada:</strong> {safeValue(prescription?.duration, "")}</label>
-                    </div>
+                    </div> */}
                 </div>
             ))}
         </div>
