@@ -32,8 +32,10 @@ export const MedicalOrderDetails = ({medOrdData}) => {
                 <div className="row">
                     <div className="col fw-bold">Código Origen Autorización:</div>
                     <div className="col">{safeValue(codOrigenAuth)}</div>
-                    <div className="col fw-bold">Periodicidad:</div>
-                    <div className="col">{safeValue(periodicidad)}</div>
+                    <div className="col fw-bold"></div>
+                    <div className="col"></div>
+                    {/* <div className="col fw-bold">Periodicidad:</div> */}
+                    {/* <div className="col">{safeValue(periodicidad)}</div> */}
                 </div>
                 <div className="row">
                     <div className="col fw-bold">Descripción Origen Autorización:</div>

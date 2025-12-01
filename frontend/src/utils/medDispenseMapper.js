@@ -3,11 +3,11 @@ export function mapMedicationDispenseResponse(apiResponse) {
         return { error: "Respuesta vacía del servidor" };
     }
 
-    const bundle = apiResponse[0]; // 👈 nos quedamos con el primer bundle
+    const bundle = apiResponse[0];
 
-      if (!bundle?.entry) {
-            return { error: "Respuesta sin entradas (entry) del servidor" };
-        }
+    if (!bundle?.entry) {
+        return { error: "Respuesta sin entradas (entry) del servidor" };
+    }
 
     const firstResource = bundle.entry[0];
       // 👇 Captura OperationOutcome
@@ -39,41 +39,59 @@ export function mapMedicationDispenseResponse(apiResponse) {
         ? {
             name: patientEntry.resource.name?.[0]?.text,
             identifiers: patientEntry.resource.identifier?.map(id => ({
-            type: id.type?.coding?.[0]?.code,
-            value: id.value,
+                type: id.type?.coding?.[0]?.code,
+                value: id.value,
             })),
         }
         : null;
 
+    // 📦 SUPPORTING INFORMATION agrupado por system
+    const supportingInfoBySystem = {};
+    medicationEntries.forEach(med => {
+        med.resource?.supportingInformation?.forEach(si => {
+            const sys = si.identifier?.system;
+            const val = si.identifier?.value;
+            if (sys) supportingInfoBySystem[sys] = val;
+        });
+    });
+
     const medications = medicationEntries.map(m => {
         const med = m.resource;
         return {
-        id: med.id,
-        name:
-            med.medication?.[0]?.medicationCodeableConcept?.code?.text ||
-            "Medicamento sin nombre",
-        code:
-            med.medication?.[0]?.medicationCodeableConcept?.code?.coding?.[0]
-            ?.code,
-        quantity:
-            prescriptionEntries[0].resource?.dispenseRequest?.quantity?.value,
-        prescription: med.authorizingPrescription?.display,
-        location: med.location?.display,
-        status: med?.status
+            id: med.id,
+            name:
+                med.medication?.[0]?.medicationCodeableConcept?.code?.text ||
+                "Medicamento sin nombre",
+            code:
+                med.medication?.[0]?.medicationCodeableConcept?.code?.coding?.[0]
+                ?.code,
+            status: med?.status,
+            recorded: med.recorded || "",
+            location: med.location?.display || "",
+            prescription: med.authorizingPrescription?.display || "",
+
+            // 🔥 CAMPOS NPBS
+            cum: supportingInfoBySystem["MIPRES/CODIGO"] || "",
+            diagnostico: supportingInfoBySystem["BH/CODIGO_DIAGNOSTICO"] || "",
+            direccionamiento: supportingInfoBySystem["MIPRES/ID_DIRECCIONAMIENTO"] || "",
+            nroPrescripcion: supportingInfoBySystem["MIPRES/NRO_PRESCRIPCION"] || "",
+            codigoLegal: supportingInfoBySystem["BH/CODIGO_LEGAL"] || "",
+            formaFarmaceutica:
+                supportingInfoBySystem["MIPRES/COD_FORMA_FARAMCEUTICA"] || "",
         };
     });
 
     const prescriptions = prescriptionEntries.map(p => {
         const pr = p.resource;
         return {
-        id: pr.identifier?.[0]?.value,
-        date: pr.authoredOn,
-        repeats: pr.dispenseRequest?.numberOfRepeatsAllowed,
-        quantity: pr.dispenseRequest?.quantity?.value,
-        duration:
-            (pr.dispenseRequest?.expectedSupplyDuration?.value || "") +
-            " " +
-            (pr.dispenseRequest?.expectedSupplyDuration?.unit || ""),
+            id: pr.identifier?.[0]?.value,
+            date: pr.authoredOn,
+            repeats: pr.dispenseRequest?.numberOfRepeatsAllowed,
+            quantity: pr.dispenseRequest?.quantity?.value,
+            duration:
+                (pr.dispenseRequest?.expectedSupplyDuration?.value || "") +
+                " " +
+                (pr.dispenseRequest?.expectedSupplyDuration?.unit || ""),
         };
     });
 
@@ -83,11 +101,25 @@ export function mapMedicationDispenseResponse(apiResponse) {
         postalCode: l.resource.address?.postalCode,
     }));
 
+    // 🧑‍⚕️ PRESCRIPTOR REAL
+    const firstMed = medicationEntries[0]?.resource;
+    const prescriptorName = firstMed?.extension?.find(
+        ex => ex.url === "sie000000063-medicationdispense-requesterName"
+    )?.valueString;
+
+    const prescriptorId = firstMed?.extension
+        ?.find(ex => ex.url === "sie000000063-medicationdispense-requesterId")
+        ?.valueIdentifier?.value;
+
     // 👇 retornamos un único objeto
     return {
         patient,
         medications,
         prescriptions,
         locations,
+        supportingInfoBySystem,
+        prescriptorName,
+        prescriptorId,
+        raw: bundle.entry,
     };
 }

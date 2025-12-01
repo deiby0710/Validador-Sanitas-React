@@ -3,13 +3,19 @@ import { consumirAuthorization } from "../../services/authorizationService";
 import { loadingAlert, closeAlert, defaultAlert, confirmationQuestion } from "../../utils/alert";
 
 
-export const BtnConsumir = ({numeroAutorizacion, codProducto, sucursal}) => {
+export const BtnConsumir = ({numeroAutorizacion, codProducto, sucursal, pagoConsumo}) => {
     const [isProcessing, setIsProcessing] = useState(false);
+    let texto = ''
+    if(pagoConsumo === 0){
+        texto = '';
+    } else {
+        texto = `\nPago: ${pagoConsumo}`;
+    }
     const handleConsumir = async() => {
         if(!numeroAutorizacion || !codProducto || !sucursal) {
             return defaultAlert("warning", "Faltan datos", "No se puede consumir la autorización.")
         };
-        const confirm = await confirmationQuestion("question","Consumir","¿Está Seguro de Consumir la Autorización?","Sí, consumir","No, cancelar");
+        const confirm = await confirmationQuestion("question","Consumir",`¿Está Seguro de Consumir la Autorización? ${texto}`,"Sí, consumir","No, cancelar");
         if(!confirm) return;
         setIsProcessing(true)
         loadingAlert("Procesando...", "Consumiendo autorización...");

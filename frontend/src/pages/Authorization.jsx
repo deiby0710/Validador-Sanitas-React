@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom"
 import { AuthorizationInfo } from "../components/Authorization/AuthorizationInfo"
 import { MedicalOrderDetails } from "../components/Authorization/MedicalOrderDetails"
 import { MedicationList } from "../components/Authorization/MedicationList"
+import { MedicationListNPBS } from "../components/Authorization/MedicationListNPBS"
 import { BtnConsumir } from "../components/Authorization/btnConsumir"
 import { useAuthData } from "../hooks/useAuthData"
 import { loadingAlert, closeAlert } from "../utils/alert"
@@ -11,6 +12,7 @@ export const Autorizacion = () => {
     const { numeroAutorizacion } = location.state || {};
 
     const { data, loading, error } = useAuthData(numeroAutorizacion);
+    const esNPBS = data?.desTipoAtencion === "MEDICAMENTOS NO POS";
 
     if (loading){
         loadingAlert();
@@ -52,12 +54,18 @@ export const Autorizacion = () => {
 
     const promptMedicamentos = data?.medicamentos;
 
+    const promptMedicamentosNPBS = data?.medicamentosNPBS;
+
     return (
         <div className="container py-3">
             <AuthorizationInfo authData={promptAuthData}/>
             <MedicalOrderDetails medOrdData={promptMedOrder}/>
-            <MedicationList listMed={promptMedicamentos} cobro={data?.cobro}/>
-            <BtnConsumir numeroAutorizacion={data?.numAuth} codProducto={data?.codProducto} sucursal={data?.sucursal}/>
+            {esNPBS ? (
+                <MedicationListNPBS listMed={promptMedicamentosNPBS} tipoCopago={data?.tipoCopago} cobro={data?.cobro}/>
+            ) : (
+                <MedicationList listMed={promptMedicamentos} cobro={data?.cobro} />
+            )}
+            <BtnConsumir numeroAutorizacion={data?.numAuth} codProducto={data?.codProducto} sucursal={data?.sucursal} pagoConsumo={data?.pagoConsumo}/>
         </div>
     )
 }
