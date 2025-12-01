@@ -82,69 +82,69 @@ export const getPatientBasicData = async (identificationNumber, identificationTy
 
 // Consumimos la couta moderadora.
 
-// export const copayAmount2 = async (numIden, tipoIden,authHeader) => {
-//     const currentDay = new Date().toISOString().split("T")[0]
-//     const requestBody = {
-//       "resourceType": "Bundle",
-//       "id": "bundle-request-copayAmount",
-//       "type": "transaction",
-//       "entry": [
-//         {
-//           "request": {
-//             "method": "GET",
-//             "url": "Patient"
-//           },
-//           "resource": {
-//             "resourceType": "Patient",
-//             "id": "GUID",
-//             "meta": {
-//               "lastUpdated": currentDay
-//             },
-//             "identifier": [
-//               {
-//                 "type": {
-//                   "coding": [
-//                     {
-//                       "code": tipoIden
-//                     }
-//                   ]
-//                 },
-//                 "system": "BH/NUMERO_IDENTIFICACION",
-//                 "value": numIden
-//               }
-//             ]
-//           }
-//         }
-//       ]
-//     }
-//     try {
-//       const response = await fetch(
-//         "https://papi.colsanitas.com/osi/api/financialResourcesManagement/payment/coverage/v1.0.0/copayAmount",
-//         {
-//           method: "POST",
-//           headers: {
-//               "Content-Type": "application/json",
-//               "Authorization": authHeader,
-//               "user": process.env.USERNAME_API,
-//               "dateRequest": '2024-01-22',
-//               "businessFunction": "Dispensacion Medicamentos",
-//               "aplicationCod": "PSA000199903",
-//               "typeQuery": 2
-//           },
-//           body: JSON.stringify(requestBody)
-//         }
-//       );
+export const copayAmount2 = async (numIden, tipoIden,authHeader) => {
+    const currentDay = new Date().toISOString().split("T")[0]
+    const requestBody = {
+      "resourceType": "Bundle",
+      "id": "bundle-request-copayAmount",
+      "type": "transaction",
+      "entry": [
+        {
+          "request": {
+            "method": "GET",
+            "url": "Patient"
+          },
+          "resource": {
+            "resourceType": "Patient",
+            "id": "GUID",
+            "meta": {
+              "lastUpdated": currentDay
+            },
+            "identifier": [
+              {
+                "type": {
+                  "coding": [
+                    {
+                      "code": tipoIden
+                    }
+                  ]
+                },
+                "system": "BH/NUMERO_IDENTIFICACION",
+                "value": numIden
+              }
+            ]
+          }
+        }
+      ]
+    }
+    try {
+      const response = await fetch(
+        "https://papi.colsanitas.com/osi/api/financialResourcesManagement/payment/coverage/v1.0.0/copayAmount",
+        {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+              "Authorization": authHeader,
+              "user": process.env.USERNAME_API,
+              "dateRequest": '2024-01-22',
+              "businessFunction": "Dispensacion Medicamentos",
+              "aplicationCod": "PSA000199903",
+              "typeQuery": 2
+          },
+          body: JSON.stringify(requestBody)
+        }
+      );
 
-//       if (!response.ok){
-//         throw new Error(`Error en la solicitud: ${response.status}`)
-//       }
+      if (!response.ok){
+        throw new Error(`Error en la solicitud: ${response.status}`)
+      }
 
-//       return await response.json()
-//     } catch (error) {
-//       console.log("Error en copayAmount:", error)
-//       throw error
-//     }
-// }
+      return await response.json()
+    } catch (error) {
+      console.log("Error en copayAmount:", error)
+      throw error
+    }
+}
 
 export const savePatientSanitas = async (data) => {
     try {

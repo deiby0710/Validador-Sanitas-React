@@ -141,7 +141,7 @@ export const PatientSummary = () => {
                 <TittleValidator/>
                 <UserInfoGeneral userGeneralData={promptGeneralData}/>
                 <PatientDetails PatientDetailsData={promptDetails}/>
-                {/* <AuthorizationTable autorizaciones={promptAutorizaciones} onConsultar={handleConsultar}/> */}
+                <AuthorizationTable autorizaciones={promptAutorizaciones} onConsultar={handleConsultar}/>
             </div>
             <PrintFooter fechaConsulta={fechaConsulta}/>
         </>
