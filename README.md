@@ -94,6 +94,11 @@ cd frontend
 npm install
 npm run dev
 ```
+Para crear la imagen que se sirve en el back end:
+
+```
+npm run build
+```
 
 ### Variables de entorno (`frontend/.env`)
 
@@ -168,26 +173,7 @@ Ese porcentaje se debe aplicar al valor de la tecnología, considerando:
 
 ---
 
-## 🩺 6. Servicios consumidos
-
-### **PBS**
-- `consultaAuthorization`
-- `copayAmount`
-
-### **NPBS**
-- `MedicationDispense` (datos clínicos completos)
-- Prescriptor real  
-- Diagnóstico real  
-- CUM real  
-- Dirección MIPRES  
-- Cantidad dispensada  
-- Sede  
-- Fecha registrada  
-- Información farmacéutica
-
----
-
-## 🎨 7. Componentes principales del frontend
+## 🎨 6. Componentes principales del frontend
 
 - `AuthorizationInfo` → datos administrativos de la autorización
 - `MedicalOrderDetails` → información de la orden médica
@@ -200,7 +186,7 @@ Ese porcentaje se debe aplicar al valor de la tecnología, considerando:
 
 ---
 
-## 🔐 8. Seguridad
+## 🔐 7. Seguridad
 
 - El backend firma JWT para gestionar sesiones internas.
 - Las claves de entorno se manejan con `.env` por ambiente:
@@ -210,7 +196,7 @@ Ese porcentaje se debe aplicar al valor de la tecnología, considerando:
 
 ---
 
-## 📌 9. Notas finales
+## 📌 10. Notas finales
 
 - El proyecto está dividido en frontend y backend por simplicidad de despliegue.
 - Toda la lógica de cálculo de copago está centralizada en `useAuthData`.
