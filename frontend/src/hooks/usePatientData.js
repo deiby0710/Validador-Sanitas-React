@@ -38,7 +38,7 @@ export const usePatientData = (tipo, cedula, codigoProducto, numUser) => {
             }
         }
     ]
-}
+  }
 
 
 

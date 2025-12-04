@@ -137,7 +137,7 @@ const parseCopagoData = (data, valueMoney, copayPercentage) => {
 
     if (cobro === 0 && texto === 'Sin cobro de cuota moderadora') {
         return {
-            cobro: `${porcentaje} %`,
+            cobro: (porcentaje === '' || porcentaje === null) ? "0" : `${porcentaje} %`,
             categoria,
             regimen,
             tipoCopago: "COPAGO"
