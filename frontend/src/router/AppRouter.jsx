@@ -4,6 +4,7 @@ import { Autorizacion } from '../pages/authorization'
 import { PatientForm } from '../pages/PatientForm'
 import { PatientSummary } from '../pages/PatientSummary'
 import { MedicationDispense } from '../pages/MedicationDispense'
+import { RevertAuth } from '../pages/RevertAuth'
 
 export const AppRouter = () => {
     return (
@@ -14,6 +15,7 @@ export const AppRouter = () => {
             <Route path='/usuario' element={<PatientSummary/>} />
             <Route path='/autorizacion' element={<Autorizacion/>}/>
             <Route path='/medicationDispense' element={<MedicationDispense/>}/>
+            <Route path='/revertAuth' element={<RevertAuth/>}/>
         </Routes>
     )
 }

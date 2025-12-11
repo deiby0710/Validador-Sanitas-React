@@ -8,6 +8,7 @@ import { usePatientData } from "../hooks/usePatientData";
 import { loadingAlert, closeAlert, defaultAlert } from "../utils/alert";
 import { useSavePatientSanitas } from "../hooks/useSavePatientSanitas";
 import { PrintFooter } from "../components/Print/PrintFooter";
+import { BtnRevert } from "../components/PatientSummary/BtnRevert";
 
 export const PatientSummary = () => {
     const location = useLocation();
@@ -139,6 +140,7 @@ export const PatientSummary = () => {
         <>
             <div className="container py-3">
                 <TittleValidator/>
+                <BtnRevert/>
                 <UserInfoGeneral userGeneralData={promptGeneralData}/>
                 <PatientDetails PatientDetailsData={promptDetails}/>
                 <AuthorizationTable autorizaciones={promptAutorizaciones} onConsultar={handleConsultar}/>

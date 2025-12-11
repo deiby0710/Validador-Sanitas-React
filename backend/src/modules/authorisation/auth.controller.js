@@ -1,4 +1,4 @@
-import { consultAuthorisation, consumirAuth, copayAmount1 } from './auth.service.js'
+import { consultAuthorisation, consumirAuth, revertirAuth, copayAmount1 } from './auth.service.js'
 
 export const consultAuthorisationController = async(req, res) => {
     try {
@@ -64,5 +64,29 @@ export const copayAmount1Controller = async(req,res)=>{
             message: "Error obteniendo datos del paciente (Copay Amount)",
             error: error.message
         })
+    }
+}
+
+export const revertirConsumoAuthController = async(req, res) => {
+    try {
+        const { numeroAutorizacion, codigo, sucursal } = req.body;
+        const authHeader = req.headers["Authorization"];
+        if (!numeroAutorizacion || !codigo || !sucursal ) {
+            return res.status(400).json({ message: "Faltan parametros requeridos."})
+        }
+        if (!authHeader) {
+            return res.status(401).json({ message: "Falta el token de autorización en el encabezado." });
+        }
+        const data = await revertirAuth(numeroAutorizacion, codigo, sucursal, authHeader);
+        if(!data){
+            return res.status(404).json({message: "No se encontraron datos en el copay amount"})
+        }
+        res.json(data)
+    } catch (error) {
+        console.error('Error en revertirAuthController: ', error)
+        res.status(500).json({
+            message: "Error al revertir la autorizacion.",
+            error: error.message
+        });
     }
 }

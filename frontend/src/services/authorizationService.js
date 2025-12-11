@@ -41,7 +41,22 @@ export const consumirAuthorization = async (numeroAutorizacion, codProducto, suc
     const response = await api.post("api/autorizacion/consumir", requestBody)
     return response.data
   } catch(err) {
-    console.error('Error en el servicio de copagoAuthorization:', err)
+    console.error('Error en el servicio de consumirAuthorization:', err)
+    throw err;
+  }
+}
+
+export const revertirAuthorization = async (numeroAutorizacion, codProducto, sucursal) => {
+  const requestBody = {
+    numeroAutorizacion: numeroAutorizacion, 
+    codigo: codProducto, 
+    sucursal: sucursal
+  }
+  try {
+    const response = await api.post("api/autorizacion/revertir", requestBody)
+    return response.data
+  } catch(err) {
+    console.error('Error en el servicio de revertirAuthorization:', err)
     throw err;
   }
 }

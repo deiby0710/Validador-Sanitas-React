@@ -4,6 +4,7 @@ import { MedicalOrderDetails } from "../components/Authorization/MedicalOrderDet
 import { MedicationList } from "../components/Authorization/MedicationList"
 import { MedicationListNPBS } from "../components/Authorization/MedicationListNPBS"
 import { BtnConsumir } from "../components/Authorization/btnConsumir"
+import { BtnRevertAuth } from "../components/Authorization/BtnRevertAuth"
 import { useAuthData } from "../hooks/useAuthData"
 import { loadingAlert, closeAlert } from "../utils/alert"
 
@@ -65,7 +66,11 @@ export const Autorizacion = () => {
             ) : (
                 <MedicationList listMed={promptMedicamentos} cobro={data?.cobro} />
             )}
-            <BtnConsumir numeroAutorizacion={data?.numAuth} codProducto={data?.codProducto} sucursal={data?.sucursal} pagoConsumo={data?.pagoConsumo}/>
+            {data?.authConsumida ? (
+                <BtnRevertAuth numeroAutorizacion={data?.numAuth} codProducto={data?.codProducto} sucursal={data?.sucursal}/>
+            ) : (
+                <BtnConsumir numeroAutorizacion={data?.numAuth} codProducto={data?.codProducto} sucursal={data?.sucursal} pagoConsumo={data?.pagoConsumo}/>
+            )}
         </div>
     )
 }
