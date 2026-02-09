@@ -17,7 +17,8 @@ export const BtnRevertAuth = ({numeroAutorizacion, codProducto, sucursal}) => {
             const data = await revertirAuthorization(numeroAutorizacion, codProducto, sucursal)
             closeAlert();
             if (data?.resourceType === "Bundle") {
-                return defaultAlert("success", "Consumo revertido", "La autorización ha sido revertida exitosamente.");
+                await defaultAlert("success", "Consumo revertido", "La autorización ha sido revertida exitosamente.");
+                window.location.reload();
             } else {
                 return defaultAlert("info", "Atención", "La autorización no pudo revertirse o ya estaba activa.");
             }

@@ -22,13 +22,24 @@ export const SearchForm = ({ onSearch, onSearchCA }) => {
             if (!data || !data.data || data.data.length === 0) {
                 throw new Error('Paciente no encontrado.');
             }
+
+            if (data?.data?.[0]?.coverage?.[0]?.status?.code === 'NO HABILITADO') {
+                throw new Error('Paciente no Habilitado.');
+            }
+
             // Enviamos los resultados al componente padre
             onSearch({datos: data.data, tipo, cedula});
             onSearchCA({datosCA: dataCA.coverFamilyResponse})
             closeAlert()
         } catch (error){
             closeAlert()
-            defaultAlert('error', 'Error', error.message || 'Hubo un error al buscar el paciente.')
+            if (error.message === 'Paciente no Habilitado.') {
+                defaultAlert('info', 'Atención', error.message);
+            } else if (error.message === 'Paciente no encontrado.'){
+                defaultAlert('warning', 'Resultado', error.message || 'Hubo un error al buscar el paciente.')
+            } else {
+                defaultAlert('error', 'Error', error.message || 'Hubo un error al buscar el paciente.')
+            }
         }
     };
 

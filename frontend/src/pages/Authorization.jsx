@@ -1,4 +1,5 @@
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
+import { useEffect, useRef } from "react"
 import { AuthorizationInfo } from "../components/Authorization/AuthorizationInfo"
 import { MedicalOrderDetails } from "../components/Authorization/MedicalOrderDetails"
 import { MedicationList } from "../components/Authorization/MedicationList"
@@ -6,24 +7,43 @@ import { MedicationListNPBS } from "../components/Authorization/MedicationListNP
 import { BtnConsumir } from "../components/Authorization/btnConsumir"
 import { BtnRevertAuth } from "../components/Authorization/BtnRevertAuth"
 import { useAuthData } from "../hooks/useAuthData"
-import { loadingAlert, closeAlert } from "../utils/alert"
+import { loadingAlert, closeAlert, defaultAlert } from "../utils/alert"
+import { NoteConsultAuth } from "../components/Authorization/NoteConsultAuth"
 
 export const Autorizacion = () => {
     const location = useLocation()
+    const navigate = useNavigate()
+    const handledError = useRef(false)
     const { numeroAutorizacion } = location.state || {};
 
     const { data, loading, error } = useAuthData(numeroAutorizacion);
     const esNPBS = data?.desTipoAtencion === "MEDICAMENTOS NO POS";
 
-    if (loading){
-        loadingAlert();
-    } else {
-        closeAlert();
-    }
-    
-    if (error) {
-        defaultAlert('error', "Error", error)
-    }
+    useEffect(() => {
+        if (!numeroAutorizacion && !handledError.current) {
+            handledError.current = true
+            navigate("/", { replace: true })
+        }
+    }, [numeroAutorizacion, navigate])
+
+    useEffect(() => {
+        if (loading) {
+            loadingAlert()
+        } else {
+            closeAlert()
+        }
+    }, [loading])
+
+    useEffect(() => {
+        if (error && !handledError.current) {
+            handledError.current = true
+
+            defaultAlert("error", "Error", error)
+                .then(() => {
+                    navigate("/validador", { replace: true })
+                })
+        }
+    }, [error, navigate])
     
     // Datos simulados que luego vendrán del back
     const promptAuthData = {
@@ -57,6 +77,10 @@ export const Autorizacion = () => {
 
     const promptMedicamentosNPBS = data?.medicamentosNPBS;
 
+    if (!numeroAutorizacion) {
+        return null
+    }
+
     return (
         <div className="container py-3">
             <AuthorizationInfo authData={promptAuthData}/>
@@ -66,6 +90,7 @@ export const Autorizacion = () => {
             ) : (
                 <MedicationList listMed={promptMedicamentos} cobro={data?.cobro} />
             )}
+            <NoteConsultAuth notas={data?.notes}/>
             {data?.authConsumida ? (
                 <BtnRevertAuth numeroAutorizacion={data?.numAuth} codProducto={data?.codProducto} sucursal={data?.sucursal}/>
             ) : (

@@ -1,12 +1,28 @@
 body {
-    background-image: url('../public/fondo.jpg');
+    /* background-image: url('../public/fondo.jpg');
     background-size: cover;      
     background-position: center; 
     background-repeat: no-repeat;
-    background-attachment: scroll; /* se mueve con el scroll */
-    min-height: 100vh; /* permite crecer verticalmente */
+    background-attachment: scroll;
+    min-height: 100vh; */
     margin: 0;                  
   }
+
+.layout-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  background-image: url('../public/fondo.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.layout-main {
+  flex: 1;
+  overflow-y: auto;
+}
 
 /* ESTILOS IMPRESION */
 @media print {

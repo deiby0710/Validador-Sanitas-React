@@ -25,7 +25,7 @@ export const useAuthData = (numAutorizacion) => {
             }
             try {
                 const consulta = await copagoAuthorization(numAutorizacion);
-                result = { ...result, ...parseCopagoData(consulta, result.cobroValueMoney, result.cobroPercentage)}
+                result = { ...result, ...parseCopagoData(consulta, result.cobroPercentage)}
             } catch (err) {
                 console.log('Error en authData: ', err)
             }
@@ -103,26 +103,20 @@ const parseConsultaData = (data) => {
         medicamentos: medicamentos,
         cobroValueMoney: data.authorization?.[0]?.costToBeneficiary?.valueMoney ?? '',
         cobroPercentage: data.authorization?.[0]?.costToBeneficiary?.copayPercentage ?? '',
-        pagoConsumo: autorizacion.medicationRequest?.[0]?.sharedPayment ?? '',
+        pagoConsumo: autorizacion.medicationRequest?.[0]?.sharedPayment ?? autorizacion.sharedCopayCOP ?? '',
 
         // Consumir auth
         sucursal: autorizacion.performer?.practitioner?.identifier?.[2]?.value || '',
-        codProducto: autorizacion.insurance?.coverage?.insurancePlan?.identifier?.[0]?.value || ''
+        codProducto: autorizacion.insurance?.coverage?.insurancePlan?.identifier?.[0]?.value || '',
+
+        // Nota
+        notes: autorizacion.note || []
     };
 }
 
-// const parseCopagoData = (data, valueMoney, copayPercentage) => {
-//     let cobro = data?.entry?.[0]?.resource?.costToBeneficiary?.[0]?.valueMoney?.value ?? '';
-//     let texto = data?.entry?.[0]?.resource?.costToBeneficiary?.[0]?.exception?.[0]?.type?.text ?? '';
-//     if (cobro === 0 && texto === 'Sin cobro de cuota moderadora') return {cobro: `${copayPercentage} %`};
-//     // sanitas: texto = 'Primera vez'
-//     return {cobro: valueMoney}
-// }
-
-const parseCopagoData = (data, valueMoney, copayPercentage) => {
+const parseCopagoData = (data, copayPercentage) => {
     let cobro = data?.entry?.[0]?.resource?.costToBeneficiary?.[0]?.valueMoney?.value ?? '';
     let texto = data?.entry?.[0]?.resource?.costToBeneficiary?.[0]?.exception?.[0]?.type?.text ?? '';
-
     // 🔥 1. Extraer categoría y régimen (del mismo copayAmount)
     const clases = data?.entry?.[0]?.resource?.costToBeneficiary?.[0]?.class ?? [];
     const categoria = clases.find(c => c.type?.coding?.[0]?.system === "BH/CATEGORIA")?.value || "";
@@ -136,19 +130,19 @@ const parseCopagoData = (data, valueMoney, copayPercentage) => {
     const porcentaje = porcentajesPorCategoria[categoria] ?? copayPercentage;
 
     if (cobro === 0 && texto === 'Sin cobro de cuota moderadora') {
+        const tipoCopago = copayPercentage ? 'COPAGO' : 'CUOTA MODERADORA';
         return {
             cobro: (porcentaje === '' || porcentaje === null) ? "0" : `${porcentaje} %`,
             categoria,
             regimen,
-            tipoCopago: "COPAGO"
+            tipoCopago: tipoCopago
         };
     }
-    // sanitas: texto = 'Primera vez'
-    return {cobro: valueMoney}
+    return {cobro}
 }
 
 export function parseMedicationDispense(mapped) {
-    if (!mapped || !mapped.medications) return [];
+    if (!mapped || !Array.isArray(mapped.medications)) return [];
 
     const {
         medications,
@@ -159,32 +153,21 @@ export function parseMedicationDispense(mapped) {
         locations
     } = mapped;
 
-    const cantidad = prescriptions?.[0]?.quantity || "";
-    const sede = locations?.[0]?.city || "";
+    return medications.map(med => {
 
-    return medications.map(med => ({
-        // Datos del medicamento
-        cum: med.cum || med.code || "",
-        nombre: med.name || "",
-        cantidad: cantidad,
-
-        // Información farmacéutica
-        formaFarmaceutica: med.formaFarmaceutica || "",
-        
-        // MIPRES
-        nroPrescripcion: supportingInfoBySystem["MIPRES/NRO_PRESCRIPCION"] || "",
-        direccionamiento: supportingInfoBySystem["MIPRES/ID_DIRECCIONAMIENTO"] || "",
-
-        // Diagnóstico y legalidad
-        diagnostico: med.diagnostico || "",
-        codigoLegal: med.codigoLegal || "",
-
-        // Prescriptor
-        prescriptorNombre: prescriptorName || "",
-        prescriptorId: prescriptorId || "",
-
-        // Sede y fecha
-        sede: sede,
-        fechaRegistro: med.recorded || ""
-    }));
+        return {
+            cum: med?.cum || med?.code || "",
+            nombre: med?.name || "",
+            cantidad: med?.prescriptionInfo?.quantity || "",
+            formaFarmaceutica: med?.formaFarmaceutica || "",
+            nroPrescripcion: med?.nroPrescripcion || "",
+            direccionamiento: med?.direccionamiento || "",
+            diagnostico: med?.diagnostico || "",
+            codigoLegal: med?.codigoLegal || "",
+            prescriptorNombre: prescriptorName || "",
+            prescriptorId: prescriptorId || "",
+            sede: med?.location || "",
+            fechaRegistro: med?.recorded || ""
+        };
+    });
 }

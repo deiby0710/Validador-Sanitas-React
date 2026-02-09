@@ -101,11 +101,11 @@ export const medicationDispenseByAuthorizationS = async (authorization,authHeade
         `Error en la solicitud: ${response.status} - ${rawResponse}`
       );
     }
-    
-    const cleanedJsonString = sanitizeSanitasResponse(rawResponse);
+
+    // const cleanedJsonString = sanitizeSanitasResponse(rawResponse);
 
     try {
-      const parsedData = JSON.parse(cleanedJsonString);
+      const parsedData = JSON.parse(rawResponse);
       return parsedData;
     } catch (parseError) {
       console.error("Error al parsear el JSON limpio:", parseError);

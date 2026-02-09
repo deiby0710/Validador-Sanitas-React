@@ -8,16 +8,25 @@ import { usePatientData } from "../hooks/usePatientData";
 import { loadingAlert, closeAlert, defaultAlert } from "../utils/alert";
 import { useSavePatientSanitas } from "../hooks/useSavePatientSanitas";
 import { PrintFooter } from "../components/Print/PrintFooter";
-import { BtnRevert } from "../components/PatientSummary/BtnRevert";
 
 export const PatientSummary = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const { codigo, tipo, cedula, numUser } = location.state || {};
     const [fechaConsulta, setFechaConsulta] = useState("");
 
+    useEffect(()=> {
+        if(!cedula || !tipo) {
+            navigate("/", { replace: true })
+        }
+    }, [cedula, tipo, navigate])
+
+    if (!cedula || !tipo) {
+        return null;
+    }
+
     const {data, loading, error} = usePatientData(tipo, cedula, codigo, numUser);
     useSavePatientSanitas(data, { enabled: !loading && !error });
-    const navigate = useNavigate();
 
     if (loading){
         loadingAlert();
@@ -140,7 +149,6 @@ export const PatientSummary = () => {
         <>
             <div className="container py-3">
                 <TittleValidator/>
-                <BtnRevert/>
                 <UserInfoGeneral userGeneralData={promptGeneralData}/>
                 <PatientDetails PatientDetailsData={promptDetails}/>
                 <AuthorizationTable autorizaciones={promptAutorizaciones} onConsultar={handleConsultar}/>

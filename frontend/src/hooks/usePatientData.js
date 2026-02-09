@@ -6,42 +6,6 @@ export const usePatientData = (tipo, cedula, codigoProducto, numUser) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const mockCopago = {
-    "resourceType": "Bundle",
-    "id": "488F3070F0B34C948E99194CF5A92C16",
-    "meta": {
-        "lastUpdated": "2025-06-24"
-    },
-    "type": "searchset",
-    "total": 0,
-    "entry": [
-        {
-            "resource": {
-                "resourceType": "OperationOutcome",
-                "id": "488F3070F0B34C948E99194CF5A92C16",
-                "text": {
-                    "status": "generated",
-                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">NO EXISTEN AUTORIZACION(ES) PARA EL PRESTADOR INGRESADO O PRESTADOR SEGUN CODIGO DE APLICACION</div"
-                },
-                "issue": [
-                    {
-                        "severity": "information",
-                        "code": "204",
-                        "details": {
-                            "text": "Request no aceptado"
-                        }
-                    }
-                ]
-            },
-            "search": {
-                "mode": "outcome"
-            }
-        }
-    ]
-  }
-
-
-
   useEffect(() => {
     if(!tipo || !cedula) return;
 

@@ -57,6 +57,10 @@ app.get('/hola', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
 });
 
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
+});
+
 // ------------------------------------------------------------------------
 // Iniciamos el servidor
 app.listen(port, () => {

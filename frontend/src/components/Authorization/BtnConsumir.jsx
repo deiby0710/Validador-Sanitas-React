@@ -6,10 +6,20 @@ import { loadingAlert, closeAlert, defaultAlert, confirmationQuestion } from "..
 export const BtnConsumir = ({numeroAutorizacion, codProducto, sucursal, pagoConsumo}) => {
     const [isProcessing, setIsProcessing] = useState(false);
     let texto = ''
-    if(pagoConsumo === 0){
-        texto = '';
+    // if(pagoConsumo === 0){
+    //     texto = '';
+    // } else {
+    //     texto = `\nPago: ${pagoConsumo}`;
+    // }
+    if (pagoConsumo) {
+        // Al usar (Number(pagoConsumo)) nos aseguramos de que sea un número real
+        const pagoFormateado = Number(pagoConsumo).toLocaleString('en-US', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        });
+        texto = `\nPago: ${pagoFormateado}`;
     } else {
-        texto = `\nPago: ${pagoConsumo}`;
+        texto = '';
     }
     const handleConsumir = async() => {
         if(!numeroAutorizacion || !codProducto || !sucursal) {
@@ -25,7 +35,8 @@ export const BtnConsumir = ({numeroAutorizacion, codProducto, sucursal, pagoCons
             console.log(data)
             closeAlert();
             if (data?.resourceType === "Bundle") {
-                return defaultAlert("success", "Autorización consumida", "La autorización fue consumida exitosamente.");
+                await defaultAlert("success", "Autorización consumida", "La autorización fue consumida exitosamente.");
+                window.location.reload();
             } else {
                 return defaultAlert("info", "Atención", "La autorización ya ha sido consumida anteriormente.");
             }

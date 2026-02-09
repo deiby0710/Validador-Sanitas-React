@@ -45,7 +45,7 @@ export const PatientForm = () => {
     }, [location.pathname]);
 
     return (
-        <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="d-flex justify-content-center align-items-center">
             <div className="pt-5 pb-4 ps-4 pe-4 border border-2 text-center rounded-3 bg-white shadow" style={{ maxWidth: '900px' }}>
                 <SearchForm onSearch={setResults} onSearchCA={setResultsCA}/>
                 {results && <RadioOptionList options={results.datos} onChange={handleRadioChange} optionsCA={resultsCA} onContinue={handleContinue}/>}

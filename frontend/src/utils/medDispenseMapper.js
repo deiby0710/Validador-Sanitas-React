@@ -5,119 +5,148 @@ export function mapMedicationDispenseResponse(apiResponse) {
 
     const bundle = apiResponse[0];
 
-    if (!bundle?.entry) {
-        return { error: "Respuesta sin entradas (entry) del servidor" };
+    if (!Array.isArray(bundle?.entry)) {
+        return { error: "Respuesta sin entry válido" };
     }
 
-    const firstResource = bundle.entry[0];
-      // 👇 Captura OperationOutcome
+    // 🧠 entry ahora es un array de paquetes
+    const packages = bundle.entry;
+
+    // 🔴 Validar OperationOutcome (primer paquete)
+    const firstPkg = packages[0];
+    const firstResource = firstPkg?.[0]?.resource;
+
     if (firstResource?.resourceType === "OperationOutcome") {
-        const issue = firstResource.issue?.[0]; 
+        const issue = firstResource.issue?.[0];
         const msg =
-        issue?.details?.text ||
-        issue?.details?.coding?.[0]?.display ||
-        "Error desconocido en la autorización";
-        throw new Error(msg);  // 👈 aquí lanzamos
+            issue?.details?.text ||
+            issue?.details?.coding?.[0]?.display ||
+            "Error desconocido en la autorización";
+        throw new Error(msg);
     }
 
-    // if (!bundle?.entry) return null;
-
-    const patientEntry = bundle.entry.find(
-        e => e.resource.resourceType === "Patient"
-    );
-    const medicationEntries = bundle.entry.filter(
-        e => e.resource.resourceType === "MedicationDispense"
-    );
-    const prescriptionEntries = bundle.entry.filter(
-        e => e.resource.resourceType === "MedicationRequest"
-    );
-    const locationEntries = bundle.entry.filter(
-        e => e.resource.resourceType === "Location"
-    );
+    // ==============================
+    // 🧑‍🦱 PACIENTE (igual para todos)
+    // ==============================
+    const patientEntry = firstPkg.find(
+        e => e.resource?.resourceType === "Patient"
+    )?.resource;
 
     const patient = patientEntry
         ? {
-            name: patientEntry.resource.name?.[0]?.text,
-            identifiers: patientEntry.resource.identifier?.map(id => ({
-                type: id.type?.coding?.[0]?.code,
-                value: id.value,
-            })),
-        }
+              name: patientEntry.name?.[0]?.text,
+              identifiers: patientEntry.identifier?.map(id => ({
+                  type: id.type?.coding?.[0]?.code,
+                  value: id.value,
+              })),
+          }
         : null;
 
-    // 📦 SUPPORTING INFORMATION agrupado por system
-    const supportingInfoBySystem = {};
-    medicationEntries.forEach(med => {
-        med.resource?.supportingInformation?.forEach(si => {
+    // ==============================
+    // 💊 MEDICAMENTOS (uno por paquete)
+    // ==============================
+    const medications = packages.map(pkg => {
+        const medDispense = pkg.find(
+            e => e.resource?.resourceType === "MedicationDispense"
+        )?.resource;
+
+        const prescription = pkg.find(
+            e => e.resource?.resourceType === "MedicationRequest"
+        )?.resource;
+
+        const location = pkg.find(
+            e => e.resource?.resourceType === "Location"
+        )?.resource;
+
+        // 📦 supportingInformation SOLO del medicamento
+        const supportingInfoBySystem = {};
+        medDispense?.supportingInformation?.forEach(si => {
             const sys = si.identifier?.system;
             const val = si.identifier?.value;
             if (sys) supportingInfoBySystem[sys] = val;
         });
-    });
 
-    const medications = medicationEntries.map(m => {
-        const med = m.resource;
         return {
-            id: med.id,
+            // === LO QUE YA CAPTURABAS ===
+            id: medDispense?.id,
             name:
-                med.medication?.[0]?.medicationCodeableConcept?.code?.text ||
-                "Medicamento sin nombre",
+                medDispense?.medication?.[0]?.medicationCodeableConcept?.code
+                    ?.text || "Medicamento sin nombre",
             code:
-                med.medication?.[0]?.medicationCodeableConcept?.code?.coding?.[0]
-                ?.code,
-            status: med?.status,
-            recorded: med.recorded || "",
-            location: med.location?.display || "",
-            prescription: med.authorizingPrescription?.display || "",
+                medDispense?.medication?.[0]?.medicationCodeableConcept?.code
+                    ?.coding?.[0]?.code,
+            status: medDispense?.status || "",
+            recorded: medDispense?.recorded || "",
+            location: medDispense?.location?.display || "",
+            prescription:
+                medDispense?.authorizingPrescription?.display || "",
 
-            // 🔥 CAMPOS NPBS
+            // 🔥 CAMPOS NPBS (igual que antes)
             cum: supportingInfoBySystem["MIPRES/CODIGO"] || "",
-            diagnostico: supportingInfoBySystem["BH/CODIGO_DIAGNOSTICO"] || "",
-            direccionamiento: supportingInfoBySystem["MIPRES/ID_DIRECCIONAMIENTO"] || "",
-            nroPrescripcion: supportingInfoBySystem["MIPRES/NRO_PRESCRIPCION"] || "",
-            codigoLegal: supportingInfoBySystem["BH/CODIGO_LEGAL"] || "",
+            diagnostico:
+                supportingInfoBySystem["BH/CODIGO_DIAGNOSTICO"] || "",
+            direccionamiento:
+                supportingInfoBySystem["MIPRES/ID_DIRECCIONAMIENTO"] || "",
+            nroPrescripcion:
+                supportingInfoBySystem["MIPRES/NRO_PRESCRIPCION"] || "",
+            codigoLegal:
+                supportingInfoBySystem["BH/CODIGO_LEGAL"] || "",
             formaFarmaceutica:
                 supportingInfoBySystem["MIPRES/COD_FORMA_FARAMCEUTICA"] || "",
+
+            // 📄 PRESCRIPCIÓN (como ya lo hacías)
+            prescriptionInfo: prescription
+                ? {
+                      id: prescription.identifier?.[0]?.value,
+                      date: prescription.authoredOn,
+                      repeats:
+                          prescription.dispenseRequest
+                              ?.numberOfRepeatsAllowed,
+                      quantity:
+                          prescription.dispenseRequest?.quantity?.value,
+                      duration:
+                          (prescription.dispenseRequest
+                              ?.expectedSupplyDuration?.value || "") +
+                          " " +
+                          (prescription.dispenseRequest
+                              ?.expectedSupplyDuration?.unit || ""),
+                  }
+                : null,
+
+            // 🏥 SEDE
+            locationInfo: location
+                ? {
+                      name: location.name || "Sede sin nombre",
+                      city: location.address?.city,
+                      postalCode: location.address?.postalCode,
+                  }
+                : null,
         };
     });
 
-    const prescriptions = prescriptionEntries.map(p => {
-        const pr = p.resource;
-        return {
-            id: pr.identifier?.[0]?.value,
-            date: pr.authoredOn,
-            repeats: pr.dispenseRequest?.numberOfRepeatsAllowed,
-            quantity: pr.dispenseRequest?.quantity?.value,
-            duration:
-                (pr.dispenseRequest?.expectedSupplyDuration?.value || "") +
-                " " +
-                (pr.dispenseRequest?.expectedSupplyDuration?.unit || ""),
-        };
-    });
+    // ==============================
+    // 🧑‍⚕️ PRESCRIPTOR (del primer medicamento)
+    // ==============================
+    const firstMedDispense = packages[0].find(
+        e => e.resource?.resourceType === "MedicationDispense"
+    )?.resource;
 
-    const locations = locationEntries.map(l => ({
-        name: l.resource.name || "Sede sin nombre",
-        city: l.resource.address?.city,
-        postalCode: l.resource.address?.postalCode,
-    }));
-
-    // 🧑‍⚕️ PRESCRIPTOR REAL
-    const firstMed = medicationEntries[0]?.resource;
-    const prescriptorName = firstMed?.extension?.find(
+    const prescriptorName = firstMedDispense?.extension?.find(
         ex => ex.url === "sie000000063-medicationdispense-requesterName"
     )?.valueString;
 
-    const prescriptorId = firstMed?.extension
-        ?.find(ex => ex.url === "sie000000063-medicationdispense-requesterId")
+    const prescriptorId = firstMedDispense?.extension
+        ?.find(
+            ex => ex.url === "sie000000063-medicationdispense-requesterId"
+        )
         ?.valueIdentifier?.value;
 
-    // 👇 retornamos un único objeto
+    // ==============================
+    // ✅ RESPUESTA FINAL
+    // ==============================
     return {
         patient,
         medications,
-        prescriptions,
-        locations,
-        supportingInfoBySystem,
         prescriptorName,
         prescriptorId,
         raw: bundle.entry,
