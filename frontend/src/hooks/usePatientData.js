@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { basicData, consultaAfiliado, copago } from "../services/patientService";
+import { consultaAuthorization } from "../services/authorizationService";
 
-export const usePatientData = (tipo, cedula, codigoProducto, numUser) => {
+export const usePatientData = (tipo, cedula, codigoProducto, numUser, contrato) => {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -29,7 +30,31 @@ export const usePatientData = (tipo, cedula, codigoProducto, numUser) => {
 
       try {
         const copagoResp = await copago(tipo, cedula);
-        result = { ...result, ...parseCopagoData(copagoResp) };
+        const copagoParsed = parseCopagoData(copagoResp);
+        
+        const autorizacionesFiltradas = (
+          await Promise.all(
+            (copagoParsed.autorizaciones || []).map(async ({ numero }) => {
+              try {
+                const resp = await consultaAuthorization(numero);
+
+                const contratoAut =
+                  resp?.authorization?.[0]
+                    ?.insurance?.coverage
+                    ?.contract?.identifier
+                    ?.find((id) => id.type === "CONTRATO")
+                    ?.value ?? null;
+
+                return String(contratoAut) === String(contrato) ? { numero } : null;
+              } catch (e) {
+                console.error("Fallo consultaAuthorization para", numero, e);
+                return null; // si falla, no se muestra
+              }
+            })
+          )
+        ).filter(Boolean);
+        
+        result = { ...result, autorizaciones: autorizacionesFiltradas };
       } catch (err) {
         console.error("Error en copago", err);
       }
@@ -95,8 +120,9 @@ const parseCopagoData = (response) => {
   if(!response || response.total == 0) {
     return {autorizaciones: []};
   }
-
+  console.log('Mapeamos las autorizaciones: ')
   const autorizaciones = response.entry.map(item => {
+    console.log(item)
     const numero = item.resource.identifier.find(id => id.system === "BH/NUMERO_AUTORIZACION")?.value;
     return {numero}
   })

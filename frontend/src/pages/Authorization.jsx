@@ -13,15 +13,17 @@ import { NoteConsultAuth } from "../components/Authorization/NoteConsultAuth"
 export const Autorizacion = () => {
     const location = useLocation()
     const navigate = useNavigate()
-    const handledError = useRef(false)
+    const handledRedirect = useRef(false);
+    const handledContrato = useRef(false);
+    const handledApiError = useRef(false);
     const { numeroAutorizacion } = location.state || {};
 
     const { data, loading, error } = useAuthData(numeroAutorizacion);
     const esNPBS = data?.desTipoAtencion === "MEDICAMENTOS NO POS";
 
     useEffect(() => {
-        if (!numeroAutorizacion && !handledError.current) {
-            handledError.current = true
+        if (!numeroAutorizacion && !handledRedirect.current) {
+            handledRedirect.current = true
             navigate("/", { replace: true })
         }
     }, [numeroAutorizacion, navigate])
@@ -34,9 +36,28 @@ export const Autorizacion = () => {
         }
     }, [loading])
 
+    const contratoHabilitado = data?.contratoHabilitado;
+
     useEffect(() => {
-        if (error && !handledError.current) {
-            handledError.current = true
+        if(loading) return;
+        if(contratoHabilitado !== false) return; 
+        if(handledContrato.current) return;
+
+        handledContrato.current = true;
+
+        defaultAlert(
+            "warning",
+            "Contrato no habilitado",
+            "El paciente no tiene el contrato habilitado para esta autorización."
+        ).then(() => {
+            if (window.history.length > 1) navigate(-1);
+            else navigate("/validador", { replace: true });
+        });
+    }, [contratoHabilitado, loading, navigate])
+
+    useEffect(() => {
+        if (error && !handledApiError.current) {
+            handledApiError.current = true
 
             defaultAlert("error", "Error", error)
                 .then(() => {
@@ -92,9 +113,18 @@ export const Autorizacion = () => {
             )}
             <NoteConsultAuth notas={data?.notes}/>
             {data?.authConsumida ? (
-                <BtnRevertAuth numeroAutorizacion={data?.numAuth} codProducto={data?.codProducto} sucursal={data?.sucursal}/>
+                <BtnRevertAuth 
+                    numeroAutorizacion={data?.numAuth} 
+                    codProducto={data?.codProducto} 
+                    sucursal={data?.sucursal}
+                />
             ) : (
-                <BtnConsumir numeroAutorizacion={data?.numAuth} codProducto={data?.codProducto} sucursal={data?.sucursal} pagoConsumo={data?.pagoConsumo}/>
+                <BtnConsumir 
+                    numeroAutorizacion={data?.numAuth} 
+                    codProducto={data?.codProducto} 
+                    sucursal={data?.sucursal} 
+                    pagoConsumo={data?.pagoConsumo}
+                />
             )}
         </div>
     )

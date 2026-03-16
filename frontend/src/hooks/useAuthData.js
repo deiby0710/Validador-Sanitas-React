@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { consultaAuthorization, copagoAuthorization } from "../services/authorizationService";
+import { validarPaciente } from "../services/patientService";
 import { formateDate } from "../utils/formatters";
 import { 
     serviceMedicationDispenseByAuthorization 
@@ -29,6 +30,18 @@ export const useAuthData = (numAutorizacion) => {
             } catch (err) {
                 console.log('Error en authData: ', err)
             }
+            try {
+                const contratoHabilitado = await validateContratoHabilitado(
+                    result?.tipoDocPaciente,
+                    result?.numDocPaciente,
+                    result?.contrato
+                );
+                result = { ...result, contratoHabilitado };
+            } catch (error) {
+                console.error("Error validando contrato:", err);
+                result = { ...result, contratoHabilitado: false };
+            }
+
             const esNPBS = result.desTipoAtencion === "MEDICAMENTOS NO POS";
 
             if (esNPBS) {
@@ -110,7 +123,12 @@ const parseConsultaData = (data) => {
         codProducto: autorizacion.insurance?.coverage?.insurancePlan?.identifier?.[0]?.value || '',
 
         // Nota
-        notes: autorizacion.note || []
+        notes: autorizacion.note || [],
+
+        // User info
+        contrato: autorizacion?.insurance?.coverage?.contract?.identifier?.find(i => i?.type === "CONTRATO")?.value || "",
+        tipoDocPaciente: autorizacion?.subject?.patient?.identifier?.find(i => i?.type === "TIPO_IDENTIFICACION")?.value || "",
+        numDocPaciente: autorizacion?.subject?.patient?.identifier?.find(i => i?.type === "NUMERO_IDENTIFICACION")?.value || "",
     };
 }
 
@@ -171,3 +189,38 @@ export function parseMedicationDispense(mapped) {
         };
     });
 }
+
+const validateContratoHabilitado = async (tipoDoc, numDoc, contrato) => {
+    // Llamamos a coverHeader para validar si el contrato del usuario esta habilitado.
+    // Comparamos el contrato que viene de consultAuthorization con contrato de coverHeader
+    // Si esta habilitado la variable es true, de lo contrario es false.
+    try {
+        const coverageHeader = await validarPaciente(tipoDoc, numDoc);
+        // Validaciones:
+                // console.log('Contrato: ', result.contrato)
+                // console.log('Tipo de documento: ',tipoDoc)
+                // console.log('Numero de documento: ', numDoc)
+                // console.log(
+                //     'Contrato desde el coverageHeader: ',
+                //     coverageHeader?.data?.find(item =>
+                //         item?.contract?.identifier?.some(con =>
+                //         con?.type === "CONTRATO" && con?.value === result?.contrato
+                //         )
+                //     )
+                // );
+        const contratoHabilitado = coverageHeader?.data?.some(item =>
+            item?.contract?.identifier?.some(id =>
+                id?.type === "CONTRATO" && id?.value === contrato
+            ) &&
+            item?.coverage?.some(cov =>
+                cov?.status?.code === "HABILITADO"
+            )
+        ) || false;
+        // console.log('El contrato es habilitado: ', contratoHabilitado)
+        return contratoHabilitado
+
+    } catch (error) {
+        console.error("Error validando contrato:", error);
+        return false;
+    }
+};

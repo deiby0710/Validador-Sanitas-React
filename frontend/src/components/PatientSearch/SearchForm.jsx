@@ -22,8 +22,13 @@ export const SearchForm = ({ onSearch, onSearchCA }) => {
             if (!data || !data.data || data.data.length === 0) {
                 throw new Error('Paciente no encontrado.');
             }
+            
+            const headers = data?.data ?? [];
 
-            if (data?.data?.[0]?.coverage?.[0]?.status?.code === 'NO HABILITADO') {
+            const habilitado = headers?.some( (header) => 
+                (header?.coverage ?? [].some((cov) => cov?.status?.code === "HABILITADO"))
+            )
+            if (!habilitado) {
                 throw new Error('Paciente no Habilitado.');
             }
 

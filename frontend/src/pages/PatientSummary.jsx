@@ -12,8 +12,10 @@ import { PrintFooter } from "../components/Print/PrintFooter";
 export const PatientSummary = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { codigo, tipo, cedula, numUser } = location.state || {};
+    const { codigo, tipo, cedula, numUser, contrato} = location.state || {};
     const [fechaConsulta, setFechaConsulta] = useState("");
+
+    console.log('Estamos en el usePatientData: ', contrato)
 
     useEffect(()=> {
         if(!cedula || !tipo) {
@@ -25,7 +27,7 @@ export const PatientSummary = () => {
         return null;
     }
 
-    const {data, loading, error} = usePatientData(tipo, cedula, codigo, numUser);
+    const {data, loading, error} = usePatientData(tipo, cedula, codigo, numUser, contrato);
     useSavePatientSanitas(data, { enabled: !loading && !error });
 
     if (loading){

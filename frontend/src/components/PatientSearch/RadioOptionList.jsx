@@ -36,7 +36,7 @@ export const RadioOptionList = ({ options, optionsCA, onChange, onContinue }) =>
                                 name="opcionPlan"
                                 value={valueRadio}
                                 id={`opcion${index}`}
-                                onChange={() => onChange(codigoProducto, numUser)}
+                                onChange={() => onChange(codigoProducto, numUser, contrato)}
                             />
                             <label htmlFor={`opcion${index}`} className="LabelRadioButton ms-2">
                                 {valueRadio}

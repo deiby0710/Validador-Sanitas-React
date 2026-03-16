@@ -10,13 +10,16 @@ export const PatientForm = () => {
     const [results, setResults] = useState(null);
     const [resultsCA, setResultsCA] = useState(null)
     const [numberUser, setNumUser] = useState("")
-    const [selected, setSelected] = useState("");
+    const [selected, setSelected] = useState("")
+    const [contrato, setContrato] = useState("")
     
     const navigate = useNavigate();
 
-    const handleRadioChange = (codigo, numUser) => {
+    const handleRadioChange = (codigo, numUser, contrato) => {
         setNumUser(numUser)
         setSelected(codigo);
+        setContrato(contrato)
+        console.log('El contrato es', contrato)
     }
 
     const handleContinue = () => {
@@ -32,6 +35,7 @@ export const PatientForm = () => {
                     tipo: results.tipo,
                     cedula: results.cedula,
                     numUser,
+                    contrato,
                 }
             });
         }
