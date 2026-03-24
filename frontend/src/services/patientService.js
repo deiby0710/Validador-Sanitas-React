@@ -45,7 +45,7 @@ export const copago = async (tipo, cedula) => {
   }
 }
 
-export const consultaAfiliado = async (tipo, cedula, codigoProducto) => {
+export const consultaAfiliado = async (tipo, cedula, codigoProducto, contrato) => {
   const requestBody = {
       subject: {
           identifier: [
@@ -57,7 +57,7 @@ export const consultaAfiliado = async (tipo, cedula, codigoProducto) => {
           insurancePlan: { type: "CODIGO_PRODUCTO", value: codigoProducto },
           contract: [
               { type: "PLAN", value: "" },
-              { type: "CONTRATO", value: "" },
+              { type: "CONTRATO", value: contrato },
               { type: "FAMILIA", value: "" }
           ]
       },

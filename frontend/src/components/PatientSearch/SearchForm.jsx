@@ -17,7 +17,7 @@ export const SearchForm = ({ onSearch, onSearchCA }) => {
         loadingAlert()
         try { 
             const data = await validarPaciente(tipo, cedula); // Hacemos la peticion
-            const dataCA = await consultaAfiliado(tipo, cedula, '')
+            const dataCA = await consultaAfiliado(tipo, cedula, '', '')
 
             if (!data || !data.data || data.data.length === 0) {
                 throw new Error('Paciente no encontrado.');

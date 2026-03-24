@@ -22,7 +22,7 @@ export const usePatientData = (tipo, cedula, codigoProducto, numUser, contrato) 
       }
 
       try {
-        const afiliado = await consultaAfiliado(tipo, cedula, codigoProducto);
+        const afiliado = await consultaAfiliado(tipo, cedula, codigoProducto, contrato);
         result = { ...result, ...parseConsultaAfiliadoData(afiliado, numUser) };
       } catch (err) {
         console.error("Error en consultaAfiliado", err);
