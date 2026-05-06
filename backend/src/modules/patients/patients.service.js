@@ -119,7 +119,7 @@ export const copayAmount2 = async (numIden, tipoIden,authHeader) => {
     }
     try {
       const response = await fetch(
-        "https://papi.colsanitas.com/osi/api/financialResourcesManagement/payment/coverage/v1.0.0/copayAmount",
+        process.env.COPAY_AMOUNT_2,
         {
           method: "POST",
           headers: {

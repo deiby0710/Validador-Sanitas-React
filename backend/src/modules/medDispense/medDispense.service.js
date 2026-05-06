@@ -17,7 +17,7 @@ export const medicationDispenseByIdS = async (tipoDocumento,numeroIdentificacion
 
   try {
     const response = await fetch(
-      "https://papi.colsanitas.com/osi/api/articulation/articulationOfHealthCare/V1.0.0/authorizationMedicationDispense",
+      process.env.MED_DISPENSE,
       {
         method: "POST",
         headers: {
@@ -76,7 +76,7 @@ export const medicationDispenseByAuthorizationS = async (authorization,authHeade
 
   try {
     const response = await fetch(
-      "https://papi.colsanitas.com/osi/api/articulation/articulationOfHealthCare/V1.0.0/authorizationMedicationDispense",
+      process.env.MED_DISPENSE,
       {
         method: "POST",
         headers: {

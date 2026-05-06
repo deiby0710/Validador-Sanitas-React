@@ -3,7 +3,7 @@ import { bodyConsumo } from "../../utils/body.js";
 export const consultAuthorisation = async (requestBody, authHeader) => {
     try {
         const response = await fetch(
-            'https://papi.colsanitas.com/osi/api/insurance/operationsSupport/medicalServicesAuthorization/V1.0.0/autorizathion/consultAuthorization',
+            process.env.CONSULT_AUTHORIZATION,
             {
                 method:'POST',
                 headers: {
@@ -35,7 +35,7 @@ export const consumirAuth = async (numeroAutorizacion, codigo, sucursal, authHea
   const body = bodyConsumo(numeroAutorizacion, codigo, sucursal, 'completed');
     try {
         const response = await fetch(
-            "https://papi.colsanitas.com/osi/api/insurance/operationsSupport/medicalServicesAuthorization/V1.0.0/serviceRequest/fullyPerformed",
+            process.env.FULLY_PERFORMED,
             {
                 method: "POST",
                 headers: {
@@ -66,7 +66,7 @@ export const revertirAuth = async (numeroAutorizacion, codigo, sucursal, authHea
   const body = bodyConsumo(numeroAutorizacion, codigo, sucursal, 'active');
   try {
       const response = await fetch(
-          "https://papi.colsanitas.com/osi/api/insurance/operationsSupport/medicalServicesAuthorization/V1.0.0/serviceRequest/fullyPerformed",
+          process.env.FULLY_PERFORMED,
           {
               method: "POST",
               headers: {
@@ -119,7 +119,7 @@ export const copayAmount1 = async (numeroAutorizacion,authHeader) => {
   }
   try {
     const response = await fetch(
-      "https://papi.colsanitas.com/osi/api/financialResourcesManagement/payment/coverage/v1.0.0/copayAmount",
+      process.env.COPAY_AMOUNT_1,
       {
         method: "POST",
         headers: {
