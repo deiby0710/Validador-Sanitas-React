@@ -1,0 +1,31 @@
+services:
+
+  backend:
+    build:
+      context: ./backend
+    container_name: backend-sanitas
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./backend/.env.production
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend-sanitas
+    restart: always
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-sanitas
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - backend
